@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf39df8b2b03aa34e9cb4729feb41317, type: 3}
+  m_Name: Skin1
+  m_EditorClassIdentifier: 
+  Head: {fileID: 21300000, guid: 06fa7d2e8e5444f49b68a635dbf976ed, type: 3}
+  Body: {fileID: 21300000, guid: 55346ee51dd1be943898a8f8179b59ad, type: 3}
+  Tail: {fileID: 21300000, guid: a88fb297e3aa31946abf0d9ee7c921a7, type: 3}
+  Angle: {fileID: 21300000, guid: a42316dde9c8f0149a00a9f6209ca4a0, type: 3}

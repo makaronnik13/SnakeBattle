@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf39df8b2b03aa34e9cb4729feb41317, type: 3}
+  m_Name: S2
+  m_EditorClassIdentifier: 
+  SkinName: Emerald
+  SkinCost: 25
+  Head: {fileID: 21300000, guid: c544269dd90cbae4ca8e8d2e19568504, type: 3}
+  Body: {fileID: 0}
+  Tail: {fileID: 0}
+  Angle: {fileID: 0}
