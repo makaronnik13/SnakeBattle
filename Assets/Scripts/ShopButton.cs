@@ -21,7 +21,6 @@ public class ShopButton : MonoBehaviour {
         ByeButton.interactable = Player.Instance.Money >= sb.BonusCost;
         InfoButton.onClick.AddListener(ShowInfo);
         ByeButton.onClick.AddListener(Buy);
-        Player.Instance.OnMoneyChanged += PlayerMoneysChanged;
     }
 
     public void Init(LogicElement le)
@@ -33,7 +32,6 @@ public class ShopButton : MonoBehaviour {
         ByeButton.interactable = Player.Instance.Money >= le.ElementCost;
         InfoButton.onClick.AddListener(ShowInfo);
         ByeButton.onClick.AddListener(Buy);
-        Player.Instance.OnMoneyChanged += PlayerMoneysChanged;
     }
 
     public void Init(SnakeSkin ss)
@@ -45,7 +43,6 @@ public class ShopButton : MonoBehaviour {
         ByeButton.interactable = Player.Instance.Money >= ss.SkinCost;
         InfoButton.onClick.AddListener(ShowInfo);
         ByeButton.onClick.AddListener(Buy);
-        Player.Instance.OnMoneyChanged += PlayerMoneysChanged;
     }
 
     public void Init(ModuleHolder lm)
@@ -57,7 +54,6 @@ public class ShopButton : MonoBehaviour {
         ByeButton.interactable = Player.Instance.Money >= lm.Cost;
         InfoButton.onClick.AddListener(ShowInfo);
         ByeButton.onClick.AddListener(Buy);
-        Player.Instance.OnMoneyChanged += PlayerMoneysChanged;
     }
 
     public void ShowInfo()
@@ -73,8 +69,6 @@ public class ShopButton : MonoBehaviour {
     private void PlayerMoneysChanged()
     {
         int cost = 0;
-
-        Debug.Log(_shopObject.GetType().ToString());
         switch (_shopObject.GetType().ToString())
         {
             case "ModuleHolder":
@@ -92,5 +86,21 @@ public class ShopButton : MonoBehaviour {
         }
 
         ByeButton.interactable = Player.Instance.Money >= cost;
+    }
+
+    private void OnDisable()
+    {
+        if (Player.Instance)
+        {
+            Player.Instance.OnMoneyChanged -= PlayerMoneysChanged;
+        }
+    }
+
+    private void OnEnable()
+    {
+        if (Player.Instance)
+        {
+            Player.Instance.OnMoneyChanged += PlayerMoneysChanged;
+        }
     }
 }

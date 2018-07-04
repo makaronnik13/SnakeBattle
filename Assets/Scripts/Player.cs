@@ -24,6 +24,7 @@ public  class Player : Singleton<Player>
     public List<SnakeSkin> Skins = new List<SnakeSkin>();
     public List<LogicModules> Modules = new List<LogicModules>();
     public Dictionary<LogicElement, int> Elements = new Dictionary<LogicElement, int>();
+    internal Action OnElementsListChanged = ()=> { };
 
     public void AddElements(LogicElement logicElement, int v)
     {
@@ -32,10 +33,30 @@ public  class Player : Singleton<Player>
             Elements.Add(logicElement, 0);
         }
         Elements[logicElement] += v;
+        OnElementsListChanged();
     }
 
     public void AddBonus(ShopBonus bonus)
     {
         
+    }
+
+    public int GetElementCount(LogicElement element)
+    {
+        if (element.ElementType == LogicElement.LogicElementType.MyHead)
+        {
+            return 1;
+        }
+
+        if (element.ElementType == LogicElement.LogicElementType.Any)
+        {
+            return int.MaxValue;
+        }
+        if (!Elements.ContainsKey(element))
+        {
+            AddElements(element, 0);
+        }
+
+        return Elements[element];
     }
 }

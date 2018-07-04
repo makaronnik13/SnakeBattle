@@ -49,6 +49,10 @@ public class Shop : MonoBehaviour {
             case ShopTabs.Elements:
                 foreach (LogicElement le in DefaultResources.Elements.OrderBy(b => b.ElementCost))
                 {
+                    if (le.HideInShop)
+                    {
+                        continue;
+                    }
                     GameObject newShopButton = Instantiate(ShopButtonPrefab, Vector3.zero, Quaternion.identity, ShopContent);
                     newShopButton.transform.localScale = Vector3.one;
                     newShopButton.transform.localPosition = Vector3.zero;
@@ -65,7 +69,6 @@ public class Shop : MonoBehaviour {
                 }
                 break;
             case ShopTabs.Skins:
-                Debug.Log(DefaultResources.Skins.Count);
                 foreach (SnakeSkin ss in DefaultResources.Skins.OrderBy(b => b.SkinCost))
                 {
                     GameObject newShopButton = Instantiate(ShopButtonPrefab, Vector3.zero, Quaternion.identity, ShopContent);

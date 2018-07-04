@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -21,7 +22,19 @@ public static class DefaultResources
             _randomNames = namesString.Split('\n').ToList();
         }
 
-        return _randomNames[Random.Range(0, _randomNames.Count-1)];
+        return _randomNames[UnityEngine.Random.Range(0, _randomNames.Count - 1)];
+    }
+
+    public static LogicElement GetElementByEnum(LogicElement.LogicElementType elType)
+    {
+        return Elements.FirstOrDefault(e=>e.ElementType == elType);
+    }
+
+
+    public static Sprite GetModuleSprite(LogicModules lm)
+    {
+        //compare modules by size
+        return Modules.FirstOrDefault(l=>l.Size == lm.size).Img;
     }
 
     private static List<LogicElement> _elements;

@@ -9,9 +9,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4176286f12c05f2428c6b5eafc040d4a, type: 3}
-  m_Name: 10X10
+  m_Name: 9X9
   m_EditorClassIdentifier: 
-  Size: 10
+  Size: 9
   Cost: 250
-  ModuleHolderName: 10x10
+  ModuleHolderName: 9X9
   Img: {fileID: 21300000, guid: 133583e57ba61664580e375f1423f9ba, type: 3}
