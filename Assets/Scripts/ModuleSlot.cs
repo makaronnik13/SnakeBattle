@@ -32,8 +32,11 @@ public class ModuleSlot : MonoBehaviour
 
     public void Click()
     {
-      
-        GetComponentInParent<ChipPanel>().Click(position, _currentElement);
+        if (Input.GetMouseButton(0))
+        {
+            GetComponentInParent<ChipPanel>().Click(position, _currentElement);
+        }
+        
     }
 
     public void UpdateElement(LogicElement.LogicElementType elType)
@@ -48,8 +51,8 @@ public class ModuleSlot : MonoBehaviour
 
     private void ElementChanged(LogicElement.LogicElementType elType, Vector2 pos)
     {
-        int y = transform.GetSiblingIndex() % GetComponentInParent<ChipPanel>().EditingModule.size;
-        int x = transform.GetSiblingIndex() / GetComponentInParent<ChipPanel>().EditingModule.size;
+        int y = transform.GetSiblingIndex() % GetComponentInParent<ChipPanel>().EditingModule.Size;
+        int x = transform.GetSiblingIndex() / GetComponentInParent<ChipPanel>().EditingModule.Size;
         Vector2 elPos = new Vector2(x,y);
         if (elPos == pos)
         {

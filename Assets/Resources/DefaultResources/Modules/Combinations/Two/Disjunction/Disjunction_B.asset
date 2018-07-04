@@ -9,9 +9,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4176286f12c05f2428c6b5eafc040d4a, type: 3}
-  m_Name: 9X9
+  m_Name: Disjunction_B
   m_EditorClassIdentifier: 
-  Size: 9
-  Cost: 250
-  ModuleHolderName: 9X9
+  moduleType: 1
+  Size: 2
+  Cost: 100
+  ModuleHolderName: Disjunction_B
   Img: {fileID: 21300000, guid: 133583e57ba61664580e375f1423f9ba, type: 3}
+  LogicString: '!1|2'

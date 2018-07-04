@@ -32,7 +32,21 @@ public class ModulesEditor : MonoBehaviour {
         }
     }
 
-	public void Show()
+    private CombinationPanel __combinationPanel;
+    private CombinationPanel _combinationPanel
+    {
+        get
+        {
+            if (!__combinationPanel)
+            {
+                __combinationPanel = GetComponentInChildren<CombinationPanel>();
+            }
+            return __combinationPanel;
+        }
+    }
+    
+
+    public void Show()
     {
         transform.GetChild(0).gameObject.SetActive(true);
         GetComponentInChildren<ElementsList>().UpdateList(DefaultResources.Elements);
@@ -46,7 +60,17 @@ public class ModulesEditor : MonoBehaviour {
 
     public void EditModule(LogicModules module)
     {
-        _chipPanel.Init(module);
+        if (module.ModuleType == ModuleHolder.ModuleType.Simple)
+        {
+            _chipPanel.Init(module);
+            _combinationPanel.Hide();
+        }
+        else
+        {
+            _chipPanel.Hide();
+            _combinationPanel.Init(module);
+        }
+        
     }
 
     public void ElementClicked(LogicModules editingModule, Vector2 position, LogicElement currentElement)
@@ -108,7 +132,6 @@ public class ModulesEditor : MonoBehaviour {
     private void RemovePreviousHead()
     {
         Vector2 previousHeadPosition = _chipPanel.GetHeadPosition();
-        Debug.Log(previousHeadPosition);
         _chipPanel.EditingModule.SetElement(previousHeadPosition, LogicElement.LogicElementType.Any);
     }
 
@@ -124,9 +147,9 @@ public class ModulesEditor : MonoBehaviour {
         else
         {
             List<Vector2> avaliablePositions = new List<Vector2>();
-            for (int i = 0; i < _chipPanel.EditingModule.size; i++)
+            for (int i = 0; i < _chipPanel.EditingModule.Size; i++)
             {
-                for (int j = 0; j < _chipPanel.EditingModule.size; j++)
+                for (int j = 0; j < _chipPanel.EditingModule.Size; j++)
                 {
                     if (i != pos.x && j != pos.y)
                     {
@@ -136,7 +159,7 @@ public class ModulesEditor : MonoBehaviour {
                 }
             }
             newHeadPos = avaliablePositions.OrderBy(s => Vector2.Distance(s, pos)).First();
-            Player.Instance.AddElements(DefaultResources.GetElementByEnum((LogicElement.LogicElementType)_chipPanel.EditingModule.elements[(int)newHeadPos.x, (int)newHeadPos.y]), 1);
+            Player.Instance.AddElements(DefaultResources.GetElementByEnum((LogicElement.LogicElementType)_chipPanel.EditingModule.Elements[(int)newHeadPos.x, (int)newHeadPos.y]), 1);
         }
         _chipPanel.EditingModule.SetElement(newHeadPos, LogicElement.LogicElementType.MyHead);
     }

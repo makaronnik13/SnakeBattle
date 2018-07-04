@@ -87,7 +87,7 @@ public class Shop : MonoBehaviour {
             case "ModuleHolder":
                 ModuleHolder moduleHolder = (ModuleHolder)shopObject;
                 Player.Instance.Money -= moduleHolder.Cost;
-                Player.Instance.Modules.Add(new LogicModules(moduleHolder.Size));
+                Player.Instance.Modules.Add(new LogicModules(moduleHolder));
                 break;
             case "SnakeSkin":
                 SnakeSkin snakeSkin = (SnakeSkin)shopObject;

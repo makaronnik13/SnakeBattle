@@ -4,41 +4,64 @@ using UnityEngine;
 [System.Serializable]
 public class LogicModules
 {
-    public int size;
-    public int[,] elements;
+
+    public ModuleHolder.ModuleType ModuleType;
+
+    public string CombinationString;
+    public LogicModules[] Submodules;
+
+    public int Size;
+    public int[,] Elements;
     public string ModuleName;
 
-    public Action<LogicElement.LogicElementType, Vector2> OnElementSeted = (LogicElementType, Vector2) => { }; 
+    public Action<LogicElement.LogicElementType, Vector2> OnElementSeted = (LogicElementType, Vector2) => { };
+    public Action<LogicModules, int> OnSubmoduleSeted = (LogicElementType, Vector2) => { };
 
-    public LogicModules(int size)
+    public LogicModules(ModuleHolder mholder)
     {
-        this.size = size;
-        elements = new int[size,size];
+        this.Size = mholder.Size;
 
-        int center =  Mathf.FloorToInt(size / 2f);
+        ModuleType = mholder.moduleType;
 
-        for (int i = 0; i<size;i++)
+        if (ModuleType == ModuleHolder.ModuleType.Simple)
         {
-            for (int j = 0; j < size; j++)
+            Elements = new int[Size, Size];
+            int center = Mathf.FloorToInt(Size / 2f);
+            for (int i = 0; i < Size; i++)
             {
-                if (i == center && j == center)
+                for (int j = 0; j < Size; j++)
                 {
-                    //place head
-                    elements[i, j] = (int)LogicElement.LogicElementType.MyHead;
-                }
-                else
-                {
-                    //place empty
-                    elements[i, j] = (int)LogicElement.LogicElementType.Any;
+                    if (i == center && j == center)
+                    {
+                        //place head
+                        Elements[i, j] = (int)LogicElement.LogicElementType.MyHead;
+                    }
+                    else
+                    {
+                        //place empty
+                        Elements[i, j] = (int)LogicElement.LogicElementType.Any;
+                    }
                 }
             }
         }
-        ModuleName = size + "X" + size;
+        else
+        {
+            CombinationString = mholder.LogicString;
+            Submodules = new LogicModules[Size];
+        }
+
+        ModuleName = mholder.ModuleHolderName;
     }
 
     public void SetElement(Vector2 pos, LogicElement.LogicElementType type)
     {
-        elements[(int)pos.x, (int)pos.y] = (int)type;
+        Elements[(int)pos.x, (int)pos.y] = (int)type;
         OnElementSeted(type, pos);
+    }
+
+    public void SetSubmodule(int id, LogicModules submodule)
+    {
+        Submodules[id] = submodule;
+        OnSubmoduleSeted(submodule, id);
     }
 }

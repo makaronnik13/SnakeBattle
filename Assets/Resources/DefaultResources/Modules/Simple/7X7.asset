@@ -11,7 +11,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4176286f12c05f2428c6b5eafc040d4a, type: 3}
   m_Name: 7X7
   m_EditorClassIdentifier: 
+  moduleType: 0
   Size: 7
   Cost: 100
   ModuleHolderName: 7x7
   Img: {fileID: 21300000, guid: 133583e57ba61664580e375f1423f9ba, type: 3}
+  LogicString: 
