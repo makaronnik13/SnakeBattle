@@ -8,11 +8,12 @@ public class ModuleVisual : MonoBehaviour {
 
     public Image ModuleImg;
     public Text ModuleName;
-
+    private bool _isSubmodule;
     private LogicModules _module;
 
-    public void Init(LogicModules lm)
+    public void Init(LogicModules lm, bool isSubmodule = false)
     {
+        _isSubmodule = isSubmodule;
         _module = lm;
         ModuleName.text = lm.ModuleName;
         ModuleImg.sprite = DefaultResources.GetModuleSprite(lm);
@@ -21,6 +22,13 @@ public class ModuleVisual : MonoBehaviour {
 
     private void EditModule()
     {
-        GetComponentInParent<ModulesEditor>().EditModule(_module);
+        if (_isSubmodule)
+        {
+            GetComponentInParent<ModulesEditor>().SetSubmodule(_module);
+        }
+        else
+        {
+            GetComponentInParent<ModulesEditor>().EditModule(_module);
+        }
     }
 }

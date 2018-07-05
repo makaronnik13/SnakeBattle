@@ -46,13 +46,13 @@ public class ModuleSlot : MonoBehaviour
 
     private void OnEnable()
     {
-        GetComponentInParent<ChipPanel>().EditingModule.OnElementSeted += ElementChanged;
+        GetComponentInParent<ModulesEditor>().EditingModule.OnElementSeted += ElementChanged;
     }
 
     private void ElementChanged(LogicElement.LogicElementType elType, Vector2 pos)
     {
-        int y = transform.GetSiblingIndex() % GetComponentInParent<ChipPanel>().EditingModule.Size;
-        int x = transform.GetSiblingIndex() / GetComponentInParent<ChipPanel>().EditingModule.Size;
+        int y = transform.GetSiblingIndex() % GetComponentInParent<ModulesEditor>().EditingModule.Size;
+        int x = transform.GetSiblingIndex() / GetComponentInParent<ModulesEditor>().EditingModule.Size;
         Vector2 elPos = new Vector2(x,y);
         if (elPos == pos)
         {
@@ -64,7 +64,7 @@ public class ModuleSlot : MonoBehaviour
     {
         if (GetComponentInParent<ChipPanel>())
         {
-            GetComponentInParent<ChipPanel>().EditingModule.OnElementSeted -= ElementChanged;
+            GetComponentInParent<ModulesEditor>().EditingModule.OnElementSeted -= ElementChanged;
         }
     }
 }

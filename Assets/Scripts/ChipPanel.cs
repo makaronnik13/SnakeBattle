@@ -22,18 +22,16 @@ public class ChipPanel : MonoBehaviour {
         }
     }
 
-    private LogicModules _editingModule;
-    public LogicModules EditingModule
+    public LogicModules _editingModule
     {
-        get
-        {
-            return _editingModule;
-        }
+            get
+            {
+                return GetComponentInParent<ModulesEditor>().EditingModule;
+            }
     }
 
 	public void Init(LogicModules chip)
     {     
-        _editingModule = chip;
  
         foreach (Transform t in transform)
         {
@@ -80,11 +78,11 @@ public class ChipPanel : MonoBehaviour {
     {
         List<Vector2> slots = new List<Vector2>();
 
-        for (int i = 0; i < EditingModule.Size; i++)
+        for (int i = 0; i < _editingModule.Size; i++)
         {
-            for (int j = 0; j < EditingModule.Size; j++)
+            for (int j = 0; j < _editingModule.Size; j++)
             {
-                if (((LogicElement.LogicElementType)EditingModule.Elements[i,j])== LogicElement.LogicElementType.Any)
+                if (((LogicElement.LogicElementType)_editingModule.Elements[i,j])== LogicElement.LogicElementType.Any)
                 {
                     slots.Add(new Vector2(i,j));
                 }
@@ -95,11 +93,11 @@ public class ChipPanel : MonoBehaviour {
 
     public Vector2 GetHeadPosition()
     {
-        for (int i = 0; i < EditingModule.Size; i++)
+        for (int i = 0; i < _editingModule.Size; i++)
         {
-            for (int j = 0; j < EditingModule.Size; j++)
+            for (int j = 0; j < _editingModule.Size; j++)
             {
-                if (((LogicElement.LogicElementType)EditingModule.Elements[i, j]) == LogicElement.LogicElementType.MyHead)
+                if (((LogicElement.LogicElementType)_editingModule.Elements[i, j]) == LogicElement.LogicElementType.MyHead)
                 {
                     return new Vector2(i,j);
                 }

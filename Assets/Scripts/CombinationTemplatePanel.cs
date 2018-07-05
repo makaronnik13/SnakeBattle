@@ -43,4 +43,9 @@ public class CombinationTemplatePanel : MonoBehaviour {
             _comboSlots[i].Init(module.Submodules[i], !negate);
         }
     }
+
+    public void UpdateSubmodule(LogicModules newModule, int id)
+    {
+        _comboSlots[id].Init(newModule);
+    }
 }

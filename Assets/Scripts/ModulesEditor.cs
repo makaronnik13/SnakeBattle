@@ -3,21 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ModulesEditor : MonoBehaviour {
 
-    private ElementsCounter __elementCounter;
-    private ElementsCounter _elementCounter
-    {
-        get
-        {
-            if (!__elementCounter)
-            {
-                __elementCounter = GetComponentInChildren<ElementsCounter>();
-            }
-            return __elementCounter;
-        }
-    }
+    public ElementsList Elements;
+    public ChipsList Modules;
+    public ChipsList Submodules;
+    public InputField ModuleName;
+    public SelectedModuleCounter _submoduleCounter;  
+    public ElementsCounter _elementCounter;
+   
 
     private ChipPanel __chipPanel;
     private ChipPanel _chipPanel
@@ -29,6 +25,33 @@ public class ModulesEditor : MonoBehaviour {
                 __chipPanel = GetComponentInChildren<ChipPanel>();
             }
             return __chipPanel;
+        }
+    }
+
+    public LogicModules EditingModule;
+
+    public void UpdateModulesList()
+    {
+        Submodules.UpdateList(Player.Instance.Modules.Where(m => m.ModuleType == ModuleHolder.ModuleType.Simple).ToList());
+        Modules.UpdateList(Player.Instance.Modules);
+    }
+
+    public void SetSubmodule(LogicModules module)
+    {
+        if (_submoduleCounter.SelectedModule!=null)
+        {
+            Player.Instance.Modules.Add(_submoduleCounter.SelectedModule);    
+        }
+        Player.Instance.Modules.Remove(module);
+
+        UpdateModulesList();
+        if (_submoduleCounter.SelectedModule == module)
+        {
+            _submoduleCounter.SelectedModule = null;
+        }
+        else
+        {
+            _submoduleCounter.SelectedModule = module;
         }
     }
 
@@ -44,13 +67,11 @@ public class ModulesEditor : MonoBehaviour {
             return __combinationPanel;
         }
     }
-    
 
     public void Show()
     {
         transform.GetChild(0).gameObject.SetActive(true);
-        GetComponentInChildren<ElementsList>().UpdateList(DefaultResources.Elements);
-        GetComponentInChildren<ChipsList>().UpdateList(Player.Instance.Modules);
+        UpdateModulesList();
     }
 
     public void Hide()
@@ -60,17 +81,40 @@ public class ModulesEditor : MonoBehaviour {
 
     public void EditModule(LogicModules module)
     {
+        if (module==EditingModule)
+        {
+            module = null;
+        }
+
+        EditingModule = module;
+        ModuleName.gameObject.SetActive(module != null);
+        if (module!=null)
+        {
+            ModuleName.text = module.ModuleName;
+        }
+
+        _combinationPanel.Hide();
+        Submodules.gameObject.SetActive(false);
+        _submoduleCounter.gameObject.SetActive(false);
+        _chipPanel.Hide();
+        Elements.gameObject.SetActive(false);
+        _elementCounter.gameObject.SetActive(false);
+
+
         if (module.ModuleType == ModuleHolder.ModuleType.Simple)
         {
-            _chipPanel.Init(module);
-            _combinationPanel.Hide();
+            _chipPanel.Init(module);     
+            Elements.gameObject.SetActive(true);       
+            _elementCounter.gameObject.SetActive(true);
         }
         else
-        {
-            _chipPanel.Hide();
-            _combinationPanel.Init(module);
+        {        
+            _combinationPanel.Init(module);        
+            Submodules.gameObject.SetActive(true);
+            _submoduleCounter.gameObject.SetActive(true);  
         }
-        
+
+        UpdateModulesList();
     }
 
     public void ElementClicked(LogicModules editingModule, Vector2 position, LogicElement currentElement)
@@ -132,7 +176,7 @@ public class ModulesEditor : MonoBehaviour {
     private void RemovePreviousHead()
     {
         Vector2 previousHeadPosition = _chipPanel.GetHeadPosition();
-        _chipPanel.EditingModule.SetElement(previousHeadPosition, LogicElement.LogicElementType.Any);
+        EditingModule.SetElement(previousHeadPosition, LogicElement.LogicElementType.Any);
     }
 
     private void PlaceHeadNear(Vector2 pos)
@@ -147,9 +191,9 @@ public class ModulesEditor : MonoBehaviour {
         else
         {
             List<Vector2> avaliablePositions = new List<Vector2>();
-            for (int i = 0; i < _chipPanel.EditingModule.Size; i++)
+            for (int i = 0; i < EditingModule.Size; i++)
             {
-                for (int j = 0; j < _chipPanel.EditingModule.Size; j++)
+                for (int j = 0; j < EditingModule.Size; j++)
                 {
                     if (i != pos.x && j != pos.y)
                     {
@@ -159,13 +203,25 @@ public class ModulesEditor : MonoBehaviour {
                 }
             }
             newHeadPos = avaliablePositions.OrderBy(s => Vector2.Distance(s, pos)).First();
-            Player.Instance.AddElements(DefaultResources.GetElementByEnum((LogicElement.LogicElementType)_chipPanel.EditingModule.Elements[(int)newHeadPos.x, (int)newHeadPos.y]), 1);
+            Player.Instance.AddElements(DefaultResources.GetElementByEnum((LogicElement.LogicElementType)EditingModule.Elements[(int)newHeadPos.x, (int)newHeadPos.y]), 1);
         }
-        _chipPanel.EditingModule.SetElement(newHeadPos, LogicElement.LogicElementType.MyHead);
+        EditingModule.SetElement(newHeadPos, LogicElement.LogicElementType.MyHead);
     }
 
     public void SetSelectedElement(LogicElement element)
     {
         _elementCounter.SelectedElement = element;
+    }
+
+    private void Start()
+    {
+        ModuleName.gameObject.SetActive(false);
+        ModuleName.onEndEdit.AddListener(NameEdited);
+    }
+
+    private void NameEdited(string inputString)
+    {
+        EditingModule.ModuleName = inputString;
+        UpdateModulesList();
     }
 }

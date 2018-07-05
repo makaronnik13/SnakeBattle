@@ -7,6 +7,8 @@ public class LogicModules
 
     public ModuleHolder.ModuleType ModuleType;
 
+    public ModuleHolder.BaseModuleOperator Operator;
+
     public string CombinationString;
     public LogicModules[] Submodules;
 
@@ -43,6 +45,8 @@ public class LogicModules
                     }
                 }
             }
+
+            Operator = mholder.Operator;
         }
         else
         {

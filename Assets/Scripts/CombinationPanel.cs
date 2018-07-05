@@ -7,12 +7,22 @@ using UnityEngine;
 
 public class CombinationPanel : MonoBehaviour {
 
-    private LogicModules _editingModule;
-
+    private LogicModules _editingModule
+    {
+        get
+        {
+            return GetComponentInParent<ModulesEditor>().EditingModule;
+        }
+    }
+    private CombinationTemplatePanel _activeTemplate;
     private LogicModules ChoosedSubmodule;
 
 	public void Init(LogicModules module)
     {
+        if (_editingModule!=null)
+        {
+            _editingModule.OnSubmoduleSeted -= SubmoduleSeted;
+        }
         foreach (Transform t in transform)
         {
             t.gameObject.SetActive(false);
@@ -22,12 +32,30 @@ public class CombinationPanel : MonoBehaviour {
 
         GameObject template = transform.GetChild(templateIndex).gameObject;
         template.SetActive(true);
-        template.GetComponent<CombinationTemplatePanel>().Init(module);
+        _activeTemplate = template.GetComponent<CombinationTemplatePanel>();
+        _activeTemplate.Init(module);
+
+        if (_editingModule != null)
+        {
+            _editingModule.OnSubmoduleSeted += SubmoduleSeted;
+        }
+    }
+
+    private void SubmoduleSeted(LogicModules newModule, int id)
+    {
+        _activeTemplate.UpdateSubmodule(newModule, id);
     }
 
     public void SlotClicked(int v)
     {
-        _editingModule.Submodules[v] = ChoosedSubmodule;
+        if (_editingModule.Submodules[v]!=null)
+        {
+            Player.Instance.Modules.Add(_editingModule.Submodules[v]);
+            GetComponentInParent<ModulesEditor>().UpdateModulesList();
+        }
+
+        _editingModule.SetSubmodule(v, GetComponentInParent<ModulesEditor>()._submoduleCounter.SelectedModule);
+        GetComponentInParent<ModulesEditor>()._submoduleCounter.SelectedModule = null;
     }
 
     private int GetTemplateIndex(string combinationString)
@@ -44,7 +72,7 @@ public class CombinationPanel : MonoBehaviour {
             case 2:
                 return 1;
             case 3:
-                if (Regex.Matches(combinationString, "(").Count==0)
+                if (combinationString.Count(f=>f == '(')==0)
                 {
                     return 2;
                 }
