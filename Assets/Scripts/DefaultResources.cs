@@ -25,6 +25,25 @@ public static class DefaultResources
         return _randomNames[UnityEngine.Random.Range(0, _randomNames.Count - 1)];
     }
 
+    private static List<SnakeSkin> __baseSkins;
+    public static List<SnakeSkin> BaseSkins
+    {
+        get
+        {
+            if (__baseSkins == null)
+            {
+                __baseSkins = Skins.Where(s=>s.Base).ToList();
+            }
+
+            return __baseSkins;
+        }
+    }
+
+    public static SnakeSkin RandomSkin()
+    {
+        return BaseSkins[UnityEngine.Random.Range(0, BaseSkins.Count-1)];
+    }
+
     public static LogicElement GetElementByEnum(LogicElement.LogicElementType elType)
     {
         return Elements.FirstOrDefault(e=>e.ElementType == elType);

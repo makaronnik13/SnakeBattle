@@ -21,10 +21,37 @@ public  class Player : Singleton<Player>
     }
 
 
-    public List<SnakeSkin> Skins = new List<SnakeSkin>();
+    private List<SnakeProfile> _playerSnakes = new List<SnakeProfile>();
+    public List<SnakeProfile> Snakes
+    {
+        get
+        {
+            return _playerSnakes;
+        }
+        set
+        {
+            _playerSnakes = value;
+        }
+    }
+
+    public List<SnakeSkin> Skins
+    {
+        get
+        {
+            if (_skins==null)
+            {
+                _skins = DefaultResources.BaseSkins;
+            }
+            return _skins;
+        }
+    }
+    private List<SnakeSkin> _skins;
+
+
     public List<LogicModules> Modules = new List<LogicModules>();
     public Dictionary<LogicElement, int> Elements = new Dictionary<LogicElement, int>();
-    internal Action OnElementsListChanged = ()=> { };
+    public Action OnElementsListChanged = ()=> { };
+    public Action OnSkinListChanged = () => { };
 
     public void AddElements(LogicElement logicElement, int v)
     {
@@ -58,5 +85,22 @@ public  class Player : Singleton<Player>
         }
 
         return Elements[element];
+    }
+
+    public void AddSkin(SnakeSkin ss)
+    {
+        Skins.Add(ss);
+        OnSkinListChanged();
+    }
+
+    public void RemoveSkin(SnakeSkin ss)
+    {
+        Skins.Remove(ss);
+        OnSkinListChanged();
+    }
+
+    internal void DeleteSnake(SnakeProfile currentSnake)
+    {
+        throw new NotImplementedException();
     }
 }

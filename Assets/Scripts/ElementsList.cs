@@ -23,6 +23,7 @@ public class ElementsList : MonoBehaviour {
 
     public void UpdateList(List<LogicElement> elements)
     {
+        Debug.Log("show elements");
 
         foreach (Transform t in _contentTransform)
         {

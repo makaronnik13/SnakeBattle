@@ -9,6 +9,7 @@ public class ModuleSlot : MonoBehaviour
     public Image ElementImage;
     private Vector2 position;
 
+    private LogicModules _ownerModule;
 
     private LogicElement __currentElement;
     private LogicElement _currentElement
@@ -46,7 +47,8 @@ public class ModuleSlot : MonoBehaviour
 
     private void OnEnable()
     {
-        GetComponentInParent<ModulesEditor>().EditingModule.OnElementSeted += ElementChanged;
+        _ownerModule = GetComponentInParent<ModulesEditor>().EditingModule;
+        _ownerModule.OnElementSeted += ElementChanged;
     }
 
     private void ElementChanged(LogicElement.LogicElementType elType, Vector2 pos)
@@ -62,9 +64,7 @@ public class ModuleSlot : MonoBehaviour
 
     private void OnDisable()
     {
-        if (GetComponentInParent<ChipPanel>())
-        {
-            GetComponentInParent<ModulesEditor>().EditingModule.OnElementSeted -= ElementChanged;
-        }
+        _ownerModule.OnElementSeted -= ElementChanged;         
     }
+
 }

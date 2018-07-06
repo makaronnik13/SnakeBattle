@@ -100,18 +100,22 @@ public class ModulesEditor : MonoBehaviour {
         Elements.gameObject.SetActive(false);
         _elementCounter.gameObject.SetActive(false);
 
-
-        if (module.ModuleType == ModuleHolder.ModuleType.Simple)
+        if (module!=null)
         {
-            _chipPanel.Init(module);     
-            Elements.gameObject.SetActive(true);       
-            _elementCounter.gameObject.SetActive(true);
-        }
-        else
-        {        
-            _combinationPanel.Init(module);        
-            Submodules.gameObject.SetActive(true);
-            _submoduleCounter.gameObject.SetActive(true);  
+
+            if (module.ModuleType == ModuleHolder.ModuleType.Simple)
+            {
+                _chipPanel.Init(module);
+                Elements.gameObject.SetActive(true);
+                _elementCounter.gameObject.SetActive(true);
+                Elements.UpdateList(DefaultResources.Elements);
+            }
+            else
+            {
+                _combinationPanel.Init(module);
+                Submodules.gameObject.SetActive(true);
+                _submoduleCounter.gameObject.SetActive(true);
+            }
         }
 
         UpdateModulesList();

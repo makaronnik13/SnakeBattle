@@ -1,4 +1,5 @@
 ﻿
+using System;
 using UnityEngine;
 
 [System.Serializable]
@@ -10,10 +11,6 @@ public class SnakeProfile
     {
         get
         {
-            if (_nickName == null)
-            {
-                _nickName = DefaultResources.RandomName();
-            }
             return _nickName;
         }
         set
@@ -21,21 +18,30 @@ public class SnakeProfile
             _nickName = value;
         }
     }
+
+    public Action<SnakeSkin> OnSkinShanged = (ss)=> { };
     public SnakeSkin Skin
     {
         get
-        {
-            if (!_skin)
-            {
-                _skin = Resources.Load<SnakeSkin>("DefaultResources/Skin1");
-            }
+        {    
             return _skin;
+        }
+        set
+        {
+            _skin = value;
+            OnSkinShanged(_skin);
         }
     }
     private SnakeSkin _skin;
+
     public LogicModules[] Modules;
+
     public int ModulesSlots = 3;
 
-    public static SnakeSkin DefaultSnakeSkin;
-
+    public  SnakeProfile()
+    {
+        Modules = new LogicModules[ModulesSlots];
+        _skin = DefaultResources.RandomSkin();
+        _nickName = DefaultResources.RandomName();
+    }
 }

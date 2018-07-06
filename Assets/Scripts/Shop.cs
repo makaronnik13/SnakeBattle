@@ -71,6 +71,10 @@ public class Shop : MonoBehaviour {
             case ShopTabs.Skins:
                 foreach (SnakeSkin ss in DefaultResources.Skins.OrderBy(b => b.SkinCost))
                 {
+                    if (ss.Base)
+                    {
+                        continue;
+                    }
                     GameObject newShopButton = Instantiate(ShopButtonPrefab, Vector3.zero, Quaternion.identity, ShopContent);
                     newShopButton.transform.localScale = Vector3.one;
                     newShopButton.transform.localPosition = Vector3.zero;

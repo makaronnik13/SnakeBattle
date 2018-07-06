@@ -14,7 +14,6 @@ public class SnakeChooser : Singleton<SnakeChooser> {
 
     public Transform snakeVisual;
 
-    private List<SnakeProfile> _playerSnakes = new List<SnakeProfile>();
     private SnakeProfile __editingSnake;
     public SnakeProfile EditingSnake
     {
@@ -26,8 +25,8 @@ public class SnakeChooser : Singleton<SnakeChooser> {
         {
             __editingSnake = value;
             OnSnakeChanged(__editingSnake);
-            LeftButton.SetActive(__editingSnake != _playerSnakes[0]);
-            RightButton.SetActive(__editingSnake != _playerSnakes[_playerSnakes.Count-1]);
+            LeftButton.SetActive(__editingSnake != Player.Instance.Snakes[0]);
+            RightButton.SetActive(__editingSnake != Player.Instance.Snakes[Player.Instance.Snakes.Count-1]);
             foreach (Image img in snakeVisual.GetComponentsInChildren<Image>())
             {
                 img.sprite = EditingSnake.Skin.Body;
@@ -37,7 +36,7 @@ public class SnakeChooser : Singleton<SnakeChooser> {
             SnakeName.text = EditingSnake.NickName;
             if (__editingSnake!=null)
             {
-                __choosingSnakeId = _playerSnakes.IndexOf(__editingSnake);
+                __choosingSnakeId = Player.Instance.Snakes.IndexOf(__editingSnake);
             }
         }
     }
@@ -52,9 +51,9 @@ public class SnakeChooser : Singleton<SnakeChooser> {
         set
         {
             __choosingSnakeId = value;
-            if (_playerSnakes.Count!=0)
+            if (Player.Instance.Snakes.Count!=0)
             {
-                EditingSnake = _playerSnakes[__choosingSnakeId];
+                EditingSnake = Player.Instance.Snakes[__choosingSnakeId];
             }
             else
             {
@@ -76,7 +75,7 @@ public class SnakeChooser : Singleton<SnakeChooser> {
     public void CreateSnake()
     {
         SnakeProfile newSnake = new SnakeProfile();
-        _playerSnakes.Add(newSnake);
+        Player.Instance.Snakes.Add(newSnake);
         UpdateSnakeList();
         EditingSnake = newSnake;
     }
@@ -95,14 +94,14 @@ public class SnakeChooser : Singleton<SnakeChooser> {
 
     public void DeleteSnake()
     {
-        _playerSnakes.Remove(EditingSnake);
+        Player.Instance.Snakes.Remove(EditingSnake);
         UpdateSnakeList();
         _choosingSnakeId = 0;
     }
 
     private void UpdateSnakeList()
     {
-        CreateButton.SetActive(_playerSnakes.Count == 0);
-        snakeVisual.gameObject.SetActive(_playerSnakes.Count != 0);
+        CreateButton.SetActive(Player.Instance.Snakes.Count == 0);
+        snakeVisual.gameObject.SetActive(Player.Instance.Snakes.Count != 0);
     }
 }

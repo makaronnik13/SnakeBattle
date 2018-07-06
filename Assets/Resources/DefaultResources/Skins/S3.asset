@@ -13,7 +13,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SkinName: Gold
   SkinCost: 50
+  Base: 1
   Head: {fileID: 21300000, guid: ed9f2c6fc8ffe584ba6c3616bdd5ac5e, type: 3}
-  Body: {fileID: 0}
-  Tail: {fileID: 0}
-  Angle: {fileID: 0}
+  Body: {fileID: 21300000, guid: 125dc310e2fddb842be0de7956b9a2ad, type: 3}
+  Tail: {fileID: 21300000, guid: 2f51f1e7047506d48b073dd64c4c85a8, type: 3}
+  Angle: {fileID: 21300000, guid: a42316dde9c8f0149a00a9f6209ca4a0, type: 3}
