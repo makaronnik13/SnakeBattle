@@ -13,7 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ElementType: 1
   ElementName: Snake head
-  Img: {fileID: 21300000, guid: c544269dd90cbae4ca8e8d2e19568504, type: 3}
+  Img: {fileID: 21300000, guid: 5f48ba298d7894b8985e205e560ce463, type: 3}
   Description: Your snake's head
   ElementCost: 15
   HideInShop: 1

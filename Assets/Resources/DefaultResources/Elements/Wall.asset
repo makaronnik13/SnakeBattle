@@ -13,7 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ElementType: 7
   ElementName: Wall
-  Img: {fileID: 21300000, guid: 4fa1ac9ed295d7b44b3f35e666b77f8f, type: 3}
+  Img: {fileID: 21300000, guid: a77d2c1b370a84b528c50b1dcd402fcb, type: 3}
   Description: No way
   ElementCost: 13
   HideInShop: 0

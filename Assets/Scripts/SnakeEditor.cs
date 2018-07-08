@@ -26,52 +26,45 @@ public class SnakeEditor : MonoBehaviour
             __selectedModule = value;
         }
     }
-
-    private SnakeProfile _currentSnake;
+		
     private SnakeProfile CurrentSnake
     {
         get
         {
-            return _currentSnake;
+			return Player.Instance.SelectedSnake;
         }
         set
         {
-           
-            if (value!=null)
-            {
-                value.OnSkinShanged += SnakeSkinUpdated;
-                SnakeName.enabled = true;
-                SnakeName.text = value.NickName;
-                Modules.gameObject.SetActive(true);
-                Skins.gameObject.SetActive(true);
-                Skins.UpdateList(Player.Instance.Skins);
-                Modules.UpdateList(Player.Instance.Modules);
-                Create.gameObject.SetActive(false);
-                Left.gameObject.SetActive(value!=Player.Instance.Snakes[0]);
-                Right.gameObject.SetActive(value != Player.Instance.Snakes[Player.Instance.Snakes.Count-1]);
-            }
-            else
-            {
-                if (_currentSnake!=null)
-                {
-                    _currentSnake.OnSkinShanged -= SnakeSkinUpdated;
-                }
-                SnakeName.enabled = false;
-                Modules.gameObject.SetActive(false);
-                Skins.gameObject.SetActive(false);
-                Create.gameObject.SetActive(true);
-                Left.gameObject.SetActive(false);
-                Right.gameObject.SetActive(false);
-            }
-
-            _currentSnake = value;
-
-            UpdateSnakeView();
+			Player.Instance.SelectedSnake = value;
         }
     }
 
-    private void SnakeSkinUpdated(SnakeSkin obj)
+	private void SnakeUpdated()
     {
+		Debug.Log (Player.Instance.SelectedSnake);
+
+		if (Player.Instance.SelectedSnake!=null)
+		{
+			SnakeName.gameObject.SetActive(true);
+			SnakeName.text = Player.Instance.SelectedSnake.NickName;
+			Modules.gameObject.SetActive(true);
+			Skins.gameObject.SetActive(true);
+			Skins.UpdateList(Player.Instance.Skins);
+			Modules.UpdateList(Player.Instance.Modules);
+			Create.gameObject.SetActive(false);
+			Left.gameObject.SetActive(Player.Instance.SelectedSnake!=Player.Instance.Snakes[0]);
+			Right.gameObject.SetActive(Player.Instance.SelectedSnake!= Player.Instance.Snakes[Player.Instance.Snakes.Count-1]);
+		}
+		else
+		{
+			SnakeName.gameObject.SetActive(false);
+			Modules.gameObject.SetActive(false);
+			Skins.gameObject.SetActive(false);
+			Create.gameObject.SetActive(true);
+			Left.gameObject.SetActive(false);
+			Right.gameObject.SetActive(false);
+		}
+
         UpdateSkins();
         UpdateSnakeView();
     }
@@ -95,10 +88,13 @@ public class SnakeEditor : MonoBehaviour
             SnakeView.GetChild(7).GetComponent<Image>().sprite = CurrentSnake.Skin.Body;
             SnakeView.GetChild(8).GetComponent<Image>().sprite = CurrentSnake.Skin.Tail;
         }
+			
     }
 
     public void OpenEditor()
     {
+		Debug.Log ("+");
+		Player.Instance.OnSnakeChanged += SnakeUpdated;
         transform.GetChild(0).gameObject.SetActive(true);
         if (Player.Instance.Snakes.Count==0)
         {
@@ -107,7 +103,7 @@ public class SnakeEditor : MonoBehaviour
         else
         {
             CurrentSnake = Player.Instance.Snakes[0];
-            SnakeSkinUpdated(CurrentSnake.Skin);
+            SnakeUpdated();
         }
         UpdateModules();
         
@@ -115,19 +111,26 @@ public class SnakeEditor : MonoBehaviour
 
     public void CloseEditor()
     {
+		Debug.Log ("-");
+		Player.Instance.OnSnakeChanged -= SnakeUpdated;
         transform.GetChild(0).gameObject.SetActive(false);
     }
 
     public void ChooseSkin(SnakeSkin skin)
     {
+		if(CurrentSnake == null)
+		{
+			return;
+		}
         CurrentSnake.Skin = skin;
         if (!skin.Base)
         {
             Player.Instance.Skins.Remove(skin);
-            UpdateSkins();
         }
        
+		SnakeUpdated ();
     }
+		
 
     private void UpdateSkins()
     {
@@ -146,7 +149,7 @@ public class SnakeEditor : MonoBehaviour
 
     public void CreateSnake()
     {
-        Player.Instance.Snakes.Add(new SnakeProfile());
+		Player.Instance.CreateSnake();
     }
 
     public void SetModule(int id)
@@ -161,4 +164,9 @@ public class SnakeEditor : MonoBehaviour
             //move module to inventory
         }
     }
+
+	public void ChangeSnake(int step)
+	{
+		Player.Instance.ChangeSnake (step);
+	}
 }

@@ -20,6 +20,22 @@ public  class Player : Singleton<Player>
         }
     }
 
+	public Action OnSnakeChanged = ()=>{};
+
+	private SnakeProfile _selectedSnake;
+	public SnakeProfile SelectedSnake
+	{
+		get
+		{
+			return _selectedSnake;
+		}
+		set
+		{
+			_selectedSnake = value;
+			Debug.Log ("set");
+			OnSnakeChanged ();
+		}
+	}
 
     private List<SnakeProfile> _playerSnakes = new List<SnakeProfile>();
     public List<SnakeProfile> Snakes
@@ -99,8 +115,27 @@ public  class Player : Singleton<Player>
         OnSkinListChanged();
     }
 
-    internal void DeleteSnake(SnakeProfile currentSnake)
+	public void CreateSnake()
+	{
+		Snakes.Add (new SnakeProfile());
+		SelectedSnake = Snakes[Snakes.Count-1];
+	}
+
+	public void DeleteSnake(SnakeProfile currentSnake)
     {
-        throw new NotImplementedException();
+		Snakes.Remove (currentSnake);
+		if (Snakes.Count > 0) 
+		{
+			SelectedSnake = Snakes[0];	
+		} 
+		else 
+		{
+			SelectedSnake = null;
+		}
     }
+
+	public void ChangeSnake(int step)
+	{
+		SelectedSnake = Snakes[Snakes.IndexOf(SelectedSnake)+step];
+	}
 }

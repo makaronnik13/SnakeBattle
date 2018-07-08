@@ -13,7 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ElementType: 5
   ElementName: Enemy body
-  Img: {fileID: 21300000, guid: 125dc310e2fddb842be0de7956b9a2ad, type: 3}
+  Img: {fileID: 21300000, guid: 262aa2d5e05ae424cb10e7aef07d4b0e, type: 3}
   Description: enemy body
   ElementCost: 7
   HideInShop: 0

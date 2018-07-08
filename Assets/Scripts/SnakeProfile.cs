@@ -2,10 +2,9 @@
 using System;
 using UnityEngine;
 
-[System.Serializable]
+//[System.Serializable]
 public class SnakeProfile
 {
-    [SerializeField]
     private string _nickName = null;
     public string NickName
     {
@@ -38,10 +37,11 @@ public class SnakeProfile
 
     public int ModulesSlots = 3;
 
-    public  SnakeProfile()
+    public SnakeProfile()
     {
         Modules = new LogicModules[ModulesSlots];
         _skin = DefaultResources.RandomSkin();
         _nickName = DefaultResources.RandomName();
     }
+
 }

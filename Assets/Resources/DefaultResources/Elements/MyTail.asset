@@ -13,7 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ElementType: 3
   ElementName: Snake tail
-  Img: {fileID: 21300000, guid: 0b7283fb130254c4e9eaabb3695c8f23, type: 3}
+  Img: {fileID: 21300000, guid: 9409e6b36e6d246189ee0053d179d992, type: 3}
   Description: Your snake's tail
   ElementCost: 12
   HideInShop: 0

@@ -89,7 +89,7 @@ public class SnakeChooser : Singleton<SnakeChooser> {
 
     private void Start()
     {
-        LoadProfile();
+        //LoadProfile();
     }
 
     public void DeleteSnake()

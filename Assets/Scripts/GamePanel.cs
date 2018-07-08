@@ -28,7 +28,7 @@ public class GamePanel : MonoBehaviour {
         set
         {
             _score = value;
-            textScore.text = value.ToString();
+//            textScore.text = value.ToString();
         }
     }
 

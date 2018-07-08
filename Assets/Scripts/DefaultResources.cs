@@ -41,7 +41,8 @@ public static class DefaultResources
 
     public static SnakeSkin RandomSkin()
     {
-        return BaseSkins[UnityEngine.Random.Range(0, BaseSkins.Count-1)];
+		Debug.Log (BaseSkins.Count);
+        return BaseSkins[UnityEngine.Random.Range(0, BaseSkins.Count)];
     }
 
     public static LogicElement GetElementByEnum(LogicElement.LogicElementType elType)
@@ -108,4 +109,19 @@ public static class DefaultResources
             return _skins;
         }
     }
+
+	public static void Init()
+	{
+		_skins = Resources.LoadAll<SnakeSkin>("DefaultResources/Skins").ToList();
+		_modules = Resources.LoadAll<ModuleHolder>("DefaultResources/Modules").ToList();
+		_bonuses = Resources.LoadAll<ShopBonus>("DefaultResources/Bonuses").ToList();
+		_elements = Resources.LoadAll<LogicElement>("DefaultResources/Elements").ToList();
+
+		_randomNames = new List<string>();
+		string path = "Assets/Resources/DefaultResources/Names.txt";
+		StreamReader reader = new StreamReader(path);
+		string namesString = reader.ReadToEnd();
+		reader.Close();
+		_randomNames = namesString.Split('\n').ToList();
+	}
 }

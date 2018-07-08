@@ -13,7 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ElementType: 2
   ElementName: Snake body
-  Img: {fileID: 21300000, guid: f643091be473ffa4fae05434b0365a25, type: 3}
+  Img: {fileID: 21300000, guid: 8f1a5aef8d3c84fab8f538c51793f8c3, type: 3}
   Description: your snake's body
   ElementCost: 10
   HideInShop: 0

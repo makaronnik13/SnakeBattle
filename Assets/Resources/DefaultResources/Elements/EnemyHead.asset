@@ -13,7 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ElementType: 4
   ElementName: Enemy head
-  Img: {fileID: 21300000, guid: ed9f2c6fc8ffe584ba6c3616bdd5ac5e, type: 3}
+  Img: {fileID: 21300000, guid: 991c86907acd94e259d31fa1fc424a28, type: 3}
   Description: Enemy head
   ElementCost: 20
   HideInShop: 0
