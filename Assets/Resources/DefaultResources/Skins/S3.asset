@@ -3,7 +3,7 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
@@ -11,10 +11,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf39df8b2b03aa34e9cb4729feb41317, type: 3}
   m_Name: S3
   m_EditorClassIdentifier: 
-  SkinName: Gold
+  SkinName: Poision
   SkinCost: 50
-  Base: 1
-  Head: {fileID: 21300000, guid: ed9f2c6fc8ffe584ba6c3616bdd5ac5e, type: 3}
-  Body: {fileID: 21300000, guid: 125dc310e2fddb842be0de7956b9a2ad, type: 3}
-  Tail: {fileID: 21300000, guid: 2f51f1e7047506d48b073dd64c4c85a8, type: 3}
-  Angle: {fileID: 21300000, guid: a42316dde9c8f0149a00a9f6209ca4a0, type: 3}
+  Base: 0
+  Head: {fileID: 21300000, guid: 7ee737cf9404b4eaa9b231c7457017d1, type: 3}
+  Body: {fileID: 21300000, guid: 828b6f089de074a0e9ec381daa396e2f, type: 3}
+  Tail: {fileID: 21300000, guid: f5476869c35844f2bab9897c93c0fc84, type: 3}
+  Angle: {fileID: 21300000, guid: 0bf8f948193ac4bcead5ead4d59b90eb, type: 3}

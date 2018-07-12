@@ -3,7 +3,7 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Name: "\u0421onjunction_A"
   m_EditorClassIdentifier: 
   moduleType: 1
+  Operator: 0
   Size: 2
   Cost: 75
   ModuleHolderName: Conjunction_A
-  Img: {fileID: 21300000, guid: 133583e57ba61664580e375f1423f9ba, type: 3}
+  Img: {fileID: 21300000, guid: 4f49bd5bb19104e2685015dcc4131c72, type: 3}
   LogicString: 1&2

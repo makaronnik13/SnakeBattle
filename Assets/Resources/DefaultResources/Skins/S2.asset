@@ -3,7 +3,7 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Name: S2
   m_EditorClassIdentifier: 
   SkinName: Emerald
-  SkinCost: 25
-  Base: 1
-  Head: {fileID: 21300000, guid: 8720f33d710b6e548a0d6bb1d95ec65a, type: 3}
-  Body: {fileID: 21300000, guid: 8d0c2b2640e70174e9e0029cfb090e0e, type: 3}
-  Tail: {fileID: 21300000, guid: 0a680298fb5c3224f9b6aa172226ba52, type: 3}
-  Angle: {fileID: 21300000, guid: cc2832d9d1752bc48a217d729ac0a146, type: 3}
+  SkinCost: 75
+  Base: 0
+  Head: {fileID: 21300000, guid: d211e12c02eec4032a77493e2e8f81ef, type: 3}
+  Body: {fileID: 21300000, guid: 30e02ed5fe3cd41e4a0c07fd4592b2ad, type: 3}
+  Tail: {fileID: 21300000, guid: 711675ddc64114d0a8253550cd5d0c72, type: 3}
+  Angle: {fileID: 21300000, guid: 871519c19144640fcbafcecdb617d3fc, type: 3}

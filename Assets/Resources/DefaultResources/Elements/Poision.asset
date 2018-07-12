@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Name: Poision
   m_EditorClassIdentifier: 
   ElementType: 9
-  ElementName: Poision
-  Img: {fileID: 21300000, guid: c20ebfde8f10bb24b892e1cf3cdae992, type: 3}
+  ElementName: Bug
+  Img: {fileID: 21300000, guid: b71eda3a482c77d479082de08018bb11, type: 3}
   Description: Danger
   ElementCost: 25
   HideInShop: 0

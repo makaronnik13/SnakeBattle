@@ -37,5 +37,6 @@ public class ModuleHolderInspector : Editor
            _holder.LogicString = EditorGUILayout.TextField("logic", _holder.LogicString);
         }
 
+        EditorUtility.SetDirty(_holder);
     }
 }

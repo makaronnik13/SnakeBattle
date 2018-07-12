@@ -3,7 +3,7 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
@@ -11,10 +11,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf39df8b2b03aa34e9cb4729feb41317, type: 3}
   m_Name: S4
   m_EditorClassIdentifier: 
-  SkinName: 
-  SkinCost: 0
+  SkinName: Pinky
+  SkinCost: 150
   Base: 0
-  Head: {fileID: 0}
-  Body: {fileID: 0}
-  Tail: {fileID: 0}
-  Angle: {fileID: 0}
+  Head: {fileID: 21300000, guid: 76bcf82f0b737438f864475feb72cc97, type: 3}
+  Body: {fileID: 21300000, guid: 40a0a4022fe534ae7a7d07e4aab33ae1, type: 3}
+  Tail: {fileID: 21300000, guid: e7812219cea964535adc68dbe0647e46, type: 3}
+  Angle: {fileID: 21300000, guid: 5a71ef8c1d2974f149c1187c7b01f6d4, type: 3}

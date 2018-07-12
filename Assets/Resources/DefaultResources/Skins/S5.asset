@@ -3,7 +3,7 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
@@ -11,10 +11,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf39df8b2b03aa34e9cb4729feb41317, type: 3}
   m_Name: S5
   m_EditorClassIdentifier: 
-  SkinName: 
-  SkinCost: 0
+  SkinName: Desert
+  SkinCost: 100
   Base: 0
-  Head: {fileID: 0}
-  Body: {fileID: 0}
-  Tail: {fileID: 0}
-  Angle: {fileID: 0}
+  Head: {fileID: 21300000, guid: 5d10d9bb18d2342d5a8d6c1b6e7a12b0, type: 3}
+  Body: {fileID: 21300000, guid: b648491a92aaf43f58fc3ad67e8efb16, type: 3}
+  Tail: {fileID: 21300000, guid: 2289926f6ebf94d9280dbac32eda456d, type: 3}
+  Angle: {fileID: 21300000, guid: 488f6e2e43e644f36acbd99a3d11d781, type: 3}

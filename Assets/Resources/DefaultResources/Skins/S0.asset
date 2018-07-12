@@ -3,7 +3,7 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
@@ -11,10 +11,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf39df8b2b03aa34e9cb4729feb41317, type: 3}
   m_Name: S0
   m_EditorClassIdentifier: 
-  SkinName: 
+  SkinName: Hopper
   SkinCost: 0
-  Base: 0
-  Head: {fileID: 0}
-  Body: {fileID: 0}
-  Tail: {fileID: 0}
-  Angle: {fileID: 0}
+  Base: 1
+  Head: {fileID: 21300000, guid: 5f48ba298d7894b8985e205e560ce463, type: 3}
+  Body: {fileID: 21300000, guid: 8f1a5aef8d3c84fab8f538c51793f8c3, type: 3}
+  Tail: {fileID: 21300000, guid: 9409e6b36e6d246189ee0053d179d992, type: 3}
+  Angle: {fileID: 21300000, guid: ce4a9699b106f4aafa8abe1b370c8602, type: 3}

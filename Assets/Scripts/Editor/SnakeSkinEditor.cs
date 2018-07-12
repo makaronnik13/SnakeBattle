@@ -39,5 +39,7 @@ public class SnakeSkinEditor : Editor
         _skin.Body = (Sprite)EditorGUILayout.ObjectField(_skin.Body, typeof(Sprite), false, GUILayout.Width(EditorGUIUtility.singleLineHeight * 4), GUILayout.Height(EditorGUIUtility.singleLineHeight * 4));
         _skin.Angle = (Sprite)EditorGUILayout.ObjectField(_skin.Angle, typeof(Sprite), false, GUILayout.Width(EditorGUIUtility.singleLineHeight * 4), GUILayout.Height(EditorGUIUtility.singleLineHeight * 4));
         EditorGUILayout.EndHorizontal();
+
+        EditorUtility.SetDirty(_skin);
     }
 }

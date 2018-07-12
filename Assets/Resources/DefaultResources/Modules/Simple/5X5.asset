@@ -3,7 +3,7 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Name: 5X5
   m_EditorClassIdentifier: 
   moduleType: 0
+  Operator: 0
   Size: 5
   Cost: 50
   ModuleHolderName: 5x5
-  Img: {fileID: 21300000, guid: 133583e57ba61664580e375f1423f9ba, type: 3}
+  Img: {fileID: 21300000, guid: 8589fbaf5b30f469b895a568694f2353, type: 3}
   LogicString: 

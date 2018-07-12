@@ -16,7 +16,8 @@ public class LogicElement:ScriptableObject
         EnemyTail = 6,
         Wall = 7,
         Fruit = 8,
-        Poision = 9
+        Bug = 9,
+        Crustling = 10
     }
 
     public LogicElementType ElementType;
