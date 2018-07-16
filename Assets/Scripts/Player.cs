@@ -6,7 +6,7 @@ using UnityEngine;
 public  class Player : Singleton<Player>
 {
     public Action OnMoneyChanged = () => { };
-    private int _money = 1000;
+    private int _money = 5000;
     public int Money
     {
         get
@@ -32,7 +32,6 @@ public  class Player : Singleton<Player>
 		set
 		{
 			_selectedSnake = value;
-			Debug.Log ("set");
 			OnSnakeChanged ();
 		}
 	}
@@ -56,7 +55,7 @@ public  class Player : Singleton<Player>
         {
             if (_skins==null)
             {
-                _skins = DefaultResources.BaseSkins;
+				_skins = new List<SnakeSkin>(DefaultResources.BaseSkins);
             }
             return _skins;
         }

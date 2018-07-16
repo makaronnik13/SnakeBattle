@@ -41,8 +41,6 @@ public class SnakeEditor : MonoBehaviour
 
 	private void SnakeUpdated()
     {
-		Debug.Log (Player.Instance.SelectedSnake);
-
 		if (Player.Instance.SelectedSnake!=null)
 		{
 			SnakeName.gameObject.SetActive(true);
@@ -122,6 +120,12 @@ public class SnakeEditor : MonoBehaviour
 		{
 			return;
 		}
+
+		if (!CurrentSnake.Skin.Base)
+		{
+			Player.Instance.Skins.Add(CurrentSnake.Skin);
+		}
+
         CurrentSnake.Skin = skin;
         if (!skin.Base)
         {

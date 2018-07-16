@@ -34,7 +34,6 @@ public static class DefaultResources
             {
                 __baseSkins = Skins.Where(s=>s.Base).ToList();
             }
-
             return __baseSkins;
         }
     }
