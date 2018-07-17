@@ -2,9 +2,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ModuleVisual : MonoBehaviour {
+public class ModuleVisual : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
+{
+
+    public static GameObject itemBeingDragged;
+    Vector3 startPosition;
+    Transform startParent;
 
     public Image ModuleImg;
     public Text ModuleName;
@@ -22,13 +28,31 @@ public class ModuleVisual : MonoBehaviour {
 
     private void EditModule()
     {
-        if (_isSubmodule)
+        if (GetComponentInParent<ModulesEditor>())
         {
-            GetComponentInParent<ModulesEditor>().SetSubmodule(_module);
+            if (_isSubmodule)
+            {
+                GetComponentInParent<ModulesEditor>().SetSubmodule(_module);
+            }
+            else
+            {
+                GetComponentInParent<ModulesEditor>().EditModule(_module);
+            }
         }
-        else
-        {
-            GetComponentInParent<ModulesEditor>().EditModule(_module);
-        }
+    }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+
+    }
+    
+    public void OnDrag(PointerEventData eventData)
+    {
+
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+     
     }
 }

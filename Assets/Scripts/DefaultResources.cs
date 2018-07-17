@@ -40,7 +40,6 @@ public static class DefaultResources
 
     public static SnakeSkin RandomSkin()
     {
-		Debug.Log (BaseSkins.Count);
         return BaseSkins[UnityEngine.Random.Range(0, BaseSkins.Count)];
     }
 
@@ -53,6 +52,7 @@ public static class DefaultResources
     public static Sprite GetModuleSprite(LogicModules lm)
     {
         //compare modules by size
+        Debug.Log(lm.Size+" "+Modules.Count);
         return Modules.FirstOrDefault(l=>l.Size == lm.Size).Img;
     }
 
@@ -94,6 +94,24 @@ public static class DefaultResources
             }
             return _modules;
         }
+    }
+
+    private static List<BoardTemplate> _templates;
+    public static List<BoardTemplate> Templates
+    {
+        get
+        {
+            if (_templates == null)
+            {
+                _templates = Resources.LoadAll<BoardTemplate>("DefaultResources/Boardtemplates").ToList();
+            }
+            return _templates;
+        }
+    }
+    public static BoardTemplate GetRandomTemplate(int players)
+    {
+        
+        return Templates.Where(t=>t.SnakesCount == players).OrderBy(x => Guid.NewGuid()).FirstOrDefault();
     }
 
     private static List<SnakeSkin> _skins;

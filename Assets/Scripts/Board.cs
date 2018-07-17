@@ -71,12 +71,13 @@ public class Board : MonoBehaviour, IEnumerable<Tile>
     {
         get
         {
-            return Positions.Where((p) => { return this[p].Content == TileContent.Empty; });
+            return Positions.Where((p) => { return this[p].Content == LogicElement.LogicElementType.None; });
         }
     }
 
-    // Use this for initialization
-    void Awake()
+
+
+    private void UpdateTiles()
     {
         rectTransform = transform as RectTransform;
 
@@ -109,8 +110,6 @@ public class Board : MonoBehaviour, IEnumerable<Tile>
 
             y += tileSize;
         }
-
-        this[5, 5].Content = TileContent.Apple;
     }
 
     // Update is called once per frame
@@ -169,11 +168,18 @@ public class Board : MonoBehaviour, IEnumerable<Tile>
     /// <summary>
     /// Resets board to original conditions.
     /// </summary>
-    public void Reset()
+    public void Reset(BoardTemplate template)
     {
-        foreach (var tile in this)
+        Columns = template.Cells.Count;
+        Rows = template.Cells[0].Count;
+        UpdateTiles();
+        for (int i = 0; i< Columns; i++)
         {
-            tile.Reset();
+            for (int j = 0; j < Rows; j++)
+            {
+                this[i, j].SetTile(template.Cells[i][j]);
+            }
         }
+        
     }
 }

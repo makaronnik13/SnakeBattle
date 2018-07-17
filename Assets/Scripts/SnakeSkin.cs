@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Snake/skin")]
+[CreateAssetMenu(menuName = "Snake/Skin")]
 public class SnakeSkin : ScriptableObject
 {
     public string SkinName;

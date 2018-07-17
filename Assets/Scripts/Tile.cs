@@ -10,38 +10,8 @@ public class Tile : MonoBehaviour
     /// Sprite for empty tile.
     /// </summary>
     public RandomSprite[] Empty;
-    /// <summary>
-    /// Sprite for normal fruit (1 point).
-    /// </summary>
-    public Sprite Apple;
-    /// <summary>
-    /// Sprite for head of snake.
-    /// </summary>
-    public Sprite SnakesHead;
-    /// <summary>
-    /// Sprite for snake's body.
-    /// </summary>
-    public Sprite SnakesBody;
-    /// <summary>
-    /// Sprite for snake's tail.
-    /// </summary>
-    public Sprite SnakesTail;
-    /// <summary>
-    /// Sprite for snake's bulged body.
-    /// </summary>
-    public Sprite SnakesBulge;
-    /// <summary>
-    /// Sprite for snake's L shape
-    /// </summary>
-    public Sprite SnakesL;
-    /// <summary>
-    /// Sprite for snake's L bulged shape
-    /// </summary>
-    public Sprite SnakesLBulged;
-    /// <summary>
-    /// List of sprites representing bonus fruit (10 points fruit).
-    /// </summary>
-    public List<Sprite> Bonuses;
+
+    public Sprite Bug, Wall, Batery, Crustling;
 
     /// <summary>
     /// Image component of this GameObject.
@@ -54,7 +24,7 @@ public class Tile : MonoBehaviour
     private Sprite lastUsedImage;
 
     private RectTransform _rectTransform;
-    private TileContent _content;
+    private LogicElement.LogicElementType _content;
     private bool _contentHidden;
 
     /// <summary>
@@ -71,48 +41,58 @@ public class Tile : MonoBehaviour
     /// <summary>
     /// Contents of this tile.
     /// </summary>
-    public TileContent Content
+    public LogicElement.LogicElementType Content
     {
         get
         {
             return _content;
         }
-        set
+    }
+
+    public void SetTile(LogicElement.LogicElementType content, SnakeSkin skin = null)
+    {
+        _content = content;
+        ZRotation = 0;
+        switch (_content)
         {
-            _content = value;
-            ZRotation = 0;
-            switch (_content)
-            {
-                case TileContent.Empty:
+            case LogicElement.LogicElementType.None:
+                image.sprite = RandomSprite.GetRandomSprite(Empty);
+                break;
+            case LogicElement.LogicElementType.Bug:
+                image.sprite = Bug;
+                break;
+            case LogicElement.LogicElementType.Crustling:
+                image.sprite = Crustling;
+                break;
+            case LogicElement.LogicElementType.Batery:
+                image.sprite = Batery;
+                break;
+            case LogicElement.LogicElementType.MyBody:
+                if (skin == null)
+                {
                     image.sprite = RandomSprite.GetRandomSprite(Empty);
-                    break;
-                case TileContent.Apple:
-                    image.sprite = Apple;
-                    break;
-                case TileContent.Bonus:
-                    image.sprite = Bonuses.RandomElement();
-                    break;
-                case TileContent.SnakesHead:
-                    image.sprite = SnakesHead;
-                    break;
-                case TileContent.SnakesBody:
-                    image.sprite = SnakesBody;
-                    break;
-                case TileContent.SnakesBulge:
-                    image.sprite = SnakesBulge;
-                    break;
-                case TileContent.SnakesTail:
-                    image.sprite = SnakesTail;
-                    break;
-                case TileContent.SnakesL:
-                    image.sprite = SnakesL;
-                    break;
-                case TileContent.SnakesLBulged:
-                    image.sprite = SnakesLBulged;
-                    break;
-            }
-            lastUsedImage = image.sprite;
+                }
+                image.sprite = skin.Body;
+                break;
+            case LogicElement.LogicElementType.MyHead:
+                if (skin == null)
+                {
+                    image.sprite = RandomSprite.GetRandomSprite(Empty);
+                }
+                image.sprite = skin.Head;
+                break;
+            case LogicElement.LogicElementType.MyTail:
+                if (skin == null)
+                {
+                    image.sprite = RandomSprite.GetRandomSprite(Empty);
+                }
+                image.sprite = skin.Tail;
+                break;
+            case LogicElement.LogicElementType.Wall:
+                image.sprite = Wall;
+                break;
         }
+        lastUsedImage = image.sprite;
     }
 
     private float _zRotation = 0;
@@ -161,7 +141,7 @@ public class Tile : MonoBehaviour
     {
         image = GetComponent<Image>();
         _rectTransform = GetComponent<RectTransform>();
-        Content = TileContent.Empty;
+        SetTile(LogicElement.LogicElementType.None);
         _contentHidden = false;
     }
 
@@ -176,6 +156,6 @@ public class Tile : MonoBehaviour
     /// </summary>
     public void Reset()
     {
-        Content = TileContent.Empty;
+        SetTile(LogicElement.LogicElementType.None);
     }
 }

@@ -15,9 +15,11 @@ public class LogicElement:ScriptableObject
         EnemyBody = 5,
         EnemyTail = 6,
         Wall = 7,
-        Fruit = 8,
+        Batery = 8,
         Bug = 9,
-        Crustling = 10
+        Crustling = 10,
+        MyAngle = 11,
+        EnemyAngle = 12
     }
 
     public LogicElementType ElementType;

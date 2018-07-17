@@ -31,6 +31,15 @@ public class SnakeProfile
             OnSkinShanged(_skin);
         }
     }
+
+    public int Length
+    {
+        get
+        {
+            return ModulesSlots + 3;
+        }
+    }
+
     private SnakeSkin _skin;
 
     public LogicModules[] Modules;

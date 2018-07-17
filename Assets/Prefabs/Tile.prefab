@@ -8,15 +8,15 @@ Prefab:
     m_TransformParent: {fileID: 0}
     m_Modifications: []
     m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 0}
+  m_SourcePrefab: {fileID: 0}
   m_RootGameObject: {fileID: 1768276262531890}
-  m_IsPrefabParent: 1
+  m_IsPrefabAsset: 1
 --- !u!1 &1768276262531890
 GameObject:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
+  serializedVersion: 6
   m_Component:
   - component: {fileID: 224871769639816630}
   - component: {fileID: 222270649043682150}
@@ -32,7 +32,7 @@ GameObject:
 --- !u!114 &114276769721457132
 MonoBehaviour:
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1768276262531890}
   m_Enabled: 1
@@ -59,7 +59,7 @@ MonoBehaviour:
 --- !u!114 &114613251576345354
 MonoBehaviour:
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1768276262531890}
   m_Enabled: 1
@@ -68,27 +68,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Empty:
-  - sprite: {fileID: 21300000, guid: 8bb921b4f0c2340dfba301cd1108a0ad, type: 3}
+  - sprite: {fileID: 21300000, guid: 5320b97891e3ba842a156bed066b745a, type: 3}
     weight: 1
-  Apple: {fileID: 21300000, guid: 533ed2b6c65e64413b646480fb9ce8c3, type: 3}
-  SnakesHead: {fileID: 21300000, guid: 5f48ba298d7894b8985e205e560ce463, type: 3}
-  SnakesBody: {fileID: 21300000, guid: 8f1a5aef8d3c84fab8f538c51793f8c3, type: 3}
-  SnakesTail: {fileID: 21300000, guid: 9409e6b36e6d246189ee0053d179d992, type: 3}
-  SnakesBulge: {fileID: 21300000, guid: 9409e6b36e6d246189ee0053d179d992, type: 3}
-  SnakesL: {fileID: 21300000, guid: ce4a9699b106f4aafa8abe1b370c8602, type: 3}
-  SnakesLBulged: {fileID: 21300000, guid: 9409e6b36e6d246189ee0053d179d992, type: 3}
-  Bonuses:
-  - {fileID: 21300000, guid: 533ed2b6c65e64413b646480fb9ce8c3, type: 3}
+  - sprite: {fileID: 21300000, guid: 25a7c5885fa048f4786314624244f2a6, type: 3}
+    weight: 0.527
+  - sprite: {fileID: 21300000, guid: 0c9216efb77a5fa4f81b1b8745dbb436, type: 3}
+    weight: 0.13
+  - sprite: {fileID: 21300000, guid: c1fd0a4da987890478bcf13a38c62692, type: 3}
+    weight: 0.151
+  Bug: {fileID: 21300000, guid: b71eda3a482c77d479082de08018bb11, type: 3}
+  Wall: {fileID: 21300000, guid: a77d2c1b370a84b528c50b1dcd402fcb, type: 3}
+  Batery: {fileID: 21300000, guid: 533ed2b6c65e64413b646480fb9ce8c3, type: 3}
+  Crustling: {fileID: 21300000, guid: 02779a5a7d13e8d4493df7719fb5d300, type: 3}
 --- !u!222 &222270649043682150
 CanvasRenderer:
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1768276262531890}
+  m_CullTransparentMesh: 0
 --- !u!224 &224871769639816630
 RectTransform:
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1768276262531890}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}

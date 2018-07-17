@@ -67,6 +67,11 @@ public class SnakeEditor : MonoBehaviour
         UpdateSnakeView();
     }
 
+    private void SetSelectedModule(LogicModules module)
+    {
+        _selectedModule = module;
+    }
+
     private void UpdateSnakeView()
     {
         foreach (Transform t in SnakeView)
@@ -91,7 +96,6 @@ public class SnakeEditor : MonoBehaviour
 
     public void OpenEditor()
     {
-		Debug.Log ("+");
 		Player.Instance.OnSnakeChanged += SnakeUpdated;
         transform.GetChild(0).gameObject.SetActive(true);
         if (Player.Instance.Snakes.Count==0)
@@ -109,7 +113,6 @@ public class SnakeEditor : MonoBehaviour
 
     public void CloseEditor()
     {
-		Debug.Log ("-");
 		Player.Instance.OnSnakeChanged -= SnakeUpdated;
         transform.GetChild(0).gameObject.SetActive(false);
     }
@@ -173,4 +176,12 @@ public class SnakeEditor : MonoBehaviour
 	{
 		Player.Instance.ChangeSnake (step);
 	}
+
+    public void SetName()
+    {
+        if (CurrentSnake!=null)
+        {
+            CurrentSnake.NickName = SnakeName.text;
+        }
+    }
 }

@@ -87,25 +87,29 @@ public class ModulesEditor : MonoBehaviour {
         }
 
         EditingModule = module;
-        ModuleName.gameObject.SetActive(module != null);
+        ModuleName.interactable = module != null;
+        if (module == null)
+        {
+            ModuleName.text = "";
+        }
+
         if (module!=null)
         {
             ModuleName.text = module.ModuleName;
         }
 
-        _combinationPanel.Hide();
-        Submodules.gameObject.SetActive(false);
-        _submoduleCounter.gameObject.SetActive(false);
+        _combinationPanel.Hide();         
         _chipPanel.Hide();
-        Elements.gameObject.SetActive(false);
-        _elementCounter.gameObject.SetActive(false);
+            
 
         if (module!=null)
         {
 
             if (module.ModuleType == ModuleHolder.ModuleType.Simple)
             {
+                _submoduleCounter.gameObject.SetActive(false);
                 _chipPanel.Init(module);
+                Submodules.gameObject.SetActive(false);
                 Elements.gameObject.SetActive(true);
                 _elementCounter.gameObject.SetActive(true);
                 Elements.UpdateList(DefaultResources.Elements);
@@ -113,8 +117,10 @@ public class ModulesEditor : MonoBehaviour {
             else
             {
                 _combinationPanel.Init(module);
+                Elements.gameObject.SetActive(false);
                 Submodules.gameObject.SetActive(true);
                 _submoduleCounter.gameObject.SetActive(true);
+                _elementCounter.gameObject.SetActive(false);
             }
         }
 
@@ -219,8 +225,11 @@ public class ModulesEditor : MonoBehaviour {
 
     private void Start()
     {
-        ModuleName.gameObject.SetActive(false);
+        ModuleName.interactable = false;
         ModuleName.onEndEdit.AddListener(NameEdited);
+        Elements.gameObject.SetActive(true);
+        _elementCounter.gameObject.SetActive(true);
+        Elements.UpdateList(DefaultResources.Elements);
     }
 
     private void NameEdited(string inputString)

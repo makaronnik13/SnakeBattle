@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Utils;
+using System.Linq;
+using System;
 
 public class Game : MonoBehaviour
 {
@@ -11,32 +13,10 @@ public class Game : MonoBehaviour
     /// </summary>
     private float time;
 
-    /// <summary>
-    /// Holds last started bonus placing coroutine.
-    /// </summary>
-    private IEnumerator bonusCoroutine;
 
-    /// <summary>
-    /// Object responisble for managing sound effects.
-    /// </summary>
-    private SoundManager soundManager;
 
-    private Snake snake;
+    private List<Snake> snakes;
 
-    /// <summary>
-    /// Position of an apple (1 point fruit).
-    /// </summary>
-    private IntVector2 applePosition;
-
-    /// <summary>
-    /// Position of 10 point (bonus) fruit.
-    /// </summary>
-    private IntVector2 bonusPosition;
-
-    /// <summary>
-    /// Specifies if bonus is visible and active.
-    /// </summary>
-    private bool bonusActive;
 
     /// <summary>
     /// Menu panel.
@@ -62,71 +42,11 @@ public class Game : MonoBehaviour
     /// </summary>
     public Board Board;
 
-    private int _score;
-    private int _highScore;
-
-    /// <summary>
-    /// Current score.
-    /// </summary>
-    public int Score
-    {
-        get
-        {
-            return _score;
-        }
-        set
-        {
-            _score = value;
-            GamePanel.Score = value;
-            GameOver.Score = value;
-
-            if (value > HighScore)
-            {
-                HighScore = value;
-            }
-        }
-    }
-
-    /// <summary>
-    /// Current high score.
-    /// </summary>
-    public int HighScore
-    {
-        get
-        {
-            return _highScore;
-        }
-        set
-        {
-            _highScore = value;
-            PlayerPrefs.SetInt("High Score", value);
-            GamePanel.HighScore = value;
-            Menu.HighScore = value;
-        }
-    }
-
-    /// <summary>
-    /// Determines if games is paused (when true) or running (when false).
-    /// </summary>
-    public bool Paused { get; private set; }
-
     // Use this for initialization
     void Start()
     {
-        // Display current high score.
-        HighScore = PlayerPrefs.GetInt("High Score", 0);
-
         // Show main menu
-        ShowMenu();
-
-        // Creates snake
-        snake = new Snake(Board);
-
-        // Pause the game
-        Paused = true;
-
-        // Find sound manager
-        soundManager = GetComponent<SoundManager>();
+        ShowMenu(); 
     }
 
     // Update is called once per frame
@@ -145,49 +65,35 @@ public class Game : MonoBehaviour
     /// </summary>
     private void UpdateGameState()
     {
-        if (!Paused && snake != null)
+        if (snakes != null)
         {
-            var dir = snake.GetDirection();//controller.NextDirection();
-
-            // New head position
-            var head = snake.NextHeadPosition(dir);
-
-            var x = head.x;
-            var y = head.y;
-
-            if (snake.WithoutTail.Contains(head))
+            foreach (Snake snake in snakes)
             {
-                // Snake has bitten its tail - game over
-                //StartCoroutine(GameOverCoroutine());
-                return;
-            }
+                var dir = snake.GetDirection();//controller.NextDirection();
 
-            if (x >= 0 && x < Board.Columns && y >= 0 && y < Board.Rows)
-            {
-                if (head == applePosition)
+                // New head position
+                var head = snake.NextHeadPosition(dir);
+
+                var x = head.x;
+                var y = head.y;
+
+                if (snake.WithoutTail.Contains(head))
                 {
-                    soundManager.PlayAppleSoundEffect();
-                    snake.Move(dir, true);
-                    Score += 1;
-                    PlantAnApple();
+                    // Snake has bitten its tail - game over
+                    //StartCoroutine(GameOverCoroutine());
+                    return;
                 }
-                else if (head == bonusPosition && bonusActive)
+
+                if (x >= 0 && x < Board.Columns && y >= 0 && y < Board.Rows)
                 {
-                    soundManager.PlayBonusSoundEffect();
-                    snake.Move(dir, true);
-                    Score += 10;
-                    StopCoroutine(bonusCoroutine);
-                    PlantABonus();
+
+                    //snake.Move(dir, false);
                 }
                 else
                 {
-                    snake.Move(dir, false);
+                    // Head is outside board's bounds - game over.
+                    //StartCoroutine(GameOverCoroutine());
                 }
-            }
-            else
-            {
-                // Head is outside board's bounds - game over.
-                //StartCoroutine(GameOverCoroutine());
             }
         }
     }
@@ -215,8 +121,11 @@ public class Game : MonoBehaviour
     /// </summary>
     public void StartGame()
     {
+        List<SnakeProfile> snakes = Player.Instance.Snakes.Take(Mathf.Min(Player.Instance.Snakes.Count, 5)).ToList();
+        BoardTemplate template = DefaultResources.GetRandomTemplate(snakes.Count);
+
         HideAllPanels();
-        Restart();
+        Restart(snakes, template);
         GamePanel.gameObject.SetActive(true);
     }
 
@@ -233,125 +142,40 @@ public class Game : MonoBehaviour
     /// <summary>
     /// Returns game to initial conditions.
     /// </summary>
-    private void Restart()
+    private void Restart(List<SnakeProfile> snakeProfiles, BoardTemplate template)
     {
-        // Set score
-        Score = 0;
+        snakes = new List<Snake>();
 
-        // Disable bonus
-        bonusActive = false;
+        Board.Reset(template);
 
-        // Clear board
-        Board.Reset();
 
-        // Resets snake
-        snake.Reset();
+        foreach (SnakeProfile sp in snakeProfiles)
+        {
+            Snake snake = new Snake(Board, sp);
+            snakes.Add(snake);
+        }
 
-        // Plant an apple
-        //PlantAnApple();
+        
+        for(int i = 0; i< snakes.Count; i++)
+        {
+            snakes[i].Reset(template.GetSnakeBasePositions(i, snakes[i].Profile.Length));
+        }
 
-        // Start bonus coroutine
-        //PlantABonus();
-
-        // Start the game
-        Paused = false;
         time = 0;
     }
 
-    /// <summary>
-    /// Starts bonus placing coroutine
-    /// </summary>
-    private void PlantABonus()
-    {
-        bonusActive = false;
-        bonusCoroutine = BonusCoroutine();
-        StartCoroutine(bonusCoroutine);
-    }
 
-    /// <summary>
-    /// Puts an apple in new position.
-    /// </summary>
-    private void PlantAnApple()
-    {
-        if (Board[applePosition].Content == TileContent.Apple)
-        {
-            Board[applePosition].Content = TileContent.Empty;
-        }
 
-        var emptyPositions = Board.EmptyPositions.ToList();
-        if (emptyPositions.Count == 0)
-        {
-            return;
-        }
-        applePosition = emptyPositions.RandomElement();
-        Board[applePosition].Content = TileContent.Apple;
-    }
 
-    /// <summary>
-    /// Couroutine responsible for placing and removing bonus from the board.
-    /// It waits for a random period of time, puts the bonus on the board, and then removes it after constant delay.
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator BonusCoroutine()
-    {
-        // Wait for a random period of time
-        yield return new WaitForSeconds(Random.Range(GameSpeed * 20, GameSpeed * 40));
+    /*
+            var emptyPositions = Board.EmptyPositions.ToList();
+            if (emptyPositions.Count == 0)
+            {
+                yield break;
+            }
+            bonusPosition = emptyPositions.RandomElement();
+            Board[bonusPosition].Content = TileContent.Bonus;
+      */
 
-        // Put a bonus on a board at a random place
-        var emptyPositions = Board.EmptyPositions.ToList();
-        if (emptyPositions.Count == 0)
-        {
-            yield break;
-        }
-        bonusPosition = emptyPositions.RandomElement();
-        Board[bonusPosition].Content = TileContent.Bonus;
-        bonusActive = true;
 
-        // Wait
-        yield return new WaitForSeconds(GameSpeed * 16);
-
-        // Start bonus to blink
-        for (int i = 0; i < 5; i++)
-        {
-            Board[bonusPosition].ContentHidden = true;
-            yield return new WaitForSeconds(GameSpeed * 1.5f);
-            Board[bonusPosition].ContentHidden = false;
-            yield return new WaitForSeconds(GameSpeed * 1.5f);
-        }
-
-        // Remove a bonus and restart the coroutine
-        bonusActive = false;
-        Board[bonusPosition].Content = TileContent.Empty;
-
-        bonusCoroutine = BonusCoroutine();
-        yield return StartCoroutine(bonusCoroutine);
-    }
-
-    /// <summary>
-    /// Courotine that is started when game is over. Causes snake to blink and then shows game over panel.
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator GameOverCoroutine()
-    {
-        // Play game over sound effect
-        soundManager.PlayGameOverSoundEffect();
-
-        // Stop bonus coroutine
-        //StopCoroutine(bonusCoroutine);
-
-        // Pause the game
-        Paused = true;
-
-        // Start snake blinking
-        for (int i = 0; i < 3; i++)
-        {
-            snake.Hide();
-            yield return new WaitForSeconds(GameSpeed * 1.5f);
-            snake.Show();
-            yield return new WaitForSeconds(GameSpeed * 1.5f);
-        }
-
-        // Show "game over" panel
-        ShowGameOver();
-    }
 }
