@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ModuleVisual : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
+public class ModuleVisual : MonoBehaviour
 {
 
     public static GameObject itemBeingDragged;
@@ -38,6 +38,11 @@ public class ModuleVisual : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
             {
                 GetComponentInParent<ModulesEditor>().EditModule(_module);
             }
+        }
+
+        if (GetComponentInParent<SnakeEditor>())
+        {
+            GetComponentInParent<SnakeEditor>().SetSelectedModule(_module);
         }
     }
 

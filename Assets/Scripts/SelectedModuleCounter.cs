@@ -57,6 +57,13 @@ public class SelectedModuleCounter : MonoBehaviour
 
     public void Cklick()
     {
-        GetComponentInParent<ModulesEditor>().SetSubmodule(null);
+        if (GetComponentInParent<ModulesEditor>())
+        {
+            GetComponentInParent<ModulesEditor>().SetSubmodule(null);
+        }
+        if (GetComponentInParent<SnakeEditor>())
+        {
+            GetComponentInParent<SnakeEditor>().SetSelectedModule(null);
+        }
     }
 }

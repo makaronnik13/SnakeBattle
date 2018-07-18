@@ -6,7 +6,7 @@ using UnityEngine;
 public  class Player : Singleton<Player>
 {
     public Action OnMoneyChanged = () => { };
-    private int _money = 5000;
+    private int _money = 500000;
     public int Money
     {
         get

@@ -74,15 +74,17 @@ public class Snake : IEnumerable<Vector2Int>
     /// </summary>
     /// <param name="direction">direction of movement</param>
     /// <param name="extend">if true snake will be extended by one segment</param>
-    public void Move(Vector2Int direction, bool extend)
+    public void Move(Vector2Int direction)
     {
+
         var newHead = NextHeadPosition(direction);
 
         if (!LogicElement.IsWalkable(board[newHead].Content))
         {
             return;
         }
-       
+
+        bool extend = LogicElement.IsExtend(board[newHead].Content);
 
         body.AddLast(newHead);
 

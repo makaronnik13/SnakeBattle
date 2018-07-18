@@ -52,7 +52,6 @@ public static class DefaultResources
     public static Sprite GetModuleSprite(LogicModules lm)
     {
         //compare modules by size
-        Debug.Log(lm.Size+" "+Modules.Count);
         return Modules.FirstOrDefault(l=>l.Size == lm.Size).Img;
     }
 
@@ -141,4 +140,50 @@ public static class DefaultResources
 		reader.Close();
 		_randomNames = namesString.Split('\n').ToList();
 	}
+
+    public static int GetSlotCost(int modulesSlots)
+    {
+        switch (modulesSlots)
+        {
+            case 3:
+                return 50;
+            case 4:
+                return 150;
+            case 5:
+                return 250;
+            case 6:
+                return 400;
+            case 7:
+                return 600;
+            case 8:
+                return 1000;
+            case 9:
+                return 1500;
+        }
+
+        return 0;
+    }
+
+    public static int GetSnakeCost(int count)
+    {
+        switch (count)
+        {
+            case 0:
+                return 0;
+            case 1:
+                return 150;
+            case 2:
+                return 500;
+            case 3:
+                return 1000;
+            case 4:
+                return 2500;
+            case 5:
+                return 5000;
+            case 6:
+                return 10000;
+        }
+
+        return 0;
+    }
 }

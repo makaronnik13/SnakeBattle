@@ -35,6 +35,15 @@ public class LogicElement:ScriptableObject
         LogicElementType.Wall
     };
 
+    private static List<LogicElementType> _extended = new List<LogicElementType>()
+    {
+        LogicElementType.Batery,
+        LogicElementType.Bug,
+        LogicElementType.Crustling,
+        LogicElementType.MyTail,
+        LogicElementType.EnemyTail
+    };
+
     public LogicElementType ElementType;
     public string ElementName;
     public Sprite Img;
@@ -45,5 +54,10 @@ public class LogicElement:ScriptableObject
     public static bool IsWalkable(LogicElementType content)
     {
         return  !_notWalkable.Contains(content);
+    }
+
+    public static bool IsExtend(LogicElementType content)
+    {
+        return !_extended.Contains(content);
     }
 }

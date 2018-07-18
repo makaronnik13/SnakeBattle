@@ -3,16 +3,45 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 public class SnakeEditor : MonoBehaviour
 {
-    public Button CreateButton, DeleteButton;
+    private List<float> _bodyRotations = new List<float>()
+    {
+        90f,
+        90f,
+        90f,
+        -90f,
+        0f,
+        -90f,
+        -90,
+        -90f,
+        -90f
+    };
+    private List<float> _tailRotations = new List<float>()
+    {
+        180f,
+        90f,
+        90f,
+        90f,
+        -180f,
+        -90f,
+        -90f,
+        -90f,
+        -90f
+    };
+
+
+    public Button CreateButton, AddSlotButton;
     public Transform SnakeView;
     public Button Left, Right, Create;
     public InputField SnakeName;
 
     public ChipsList Modules;
     public SkinsList Skins;
+
+    public SelectedModuleCounter counter;
 
     private LogicModules __selectedModule;
     private LogicModules _selectedModule
@@ -24,6 +53,7 @@ public class SnakeEditor : MonoBehaviour
         set
         {
             __selectedModule = value;
+            counter.SelectedModule = __selectedModule;
         }
     }
 		
@@ -36,6 +66,7 @@ public class SnakeEditor : MonoBehaviour
         set
         {
 			Player.Instance.SelectedSnake = value;
+            UpdateAddSlotButton();
         }
     }
 
@@ -43,7 +74,7 @@ public class SnakeEditor : MonoBehaviour
     {
 		if (Player.Instance.SelectedSnake!=null)
 		{
-			SnakeName.gameObject.SetActive(true);
+			SnakeName.interactable = true;
 			SnakeName.text = Player.Instance.SelectedSnake.NickName;
 			Modules.gameObject.SetActive(true);
 			Skins.gameObject.SetActive(true);
@@ -55,7 +86,7 @@ public class SnakeEditor : MonoBehaviour
 		}
 		else
 		{
-			SnakeName.gameObject.SetActive(false);
+			SnakeName.interactable = false;
 			Modules.gameObject.SetActive(false);
 			Skins.gameObject.SetActive(false);
 			Create.gameObject.SetActive(true);
@@ -65,9 +96,10 @@ public class SnakeEditor : MonoBehaviour
 
         UpdateSkins();
         UpdateSnakeView();
+        UpdateAddSlotButton();
     }
 
-    private void SetSelectedModule(LogicModules module)
+    public void SetSelectedModule(LogicModules module)
     {
         _selectedModule = module;
     }
@@ -76,22 +108,55 @@ public class SnakeEditor : MonoBehaviour
     {
         foreach (Transform t in SnakeView)
         {
-            t.gameObject.SetActive(CurrentSnake != null);
+            t.gameObject.SetActive(false);
         }
 
         if (CurrentSnake!=null)
         {
-            SnakeView.GetChild(0).GetComponent<Image>().sprite = CurrentSnake.Skin.Head;
-            SnakeView.GetChild(1).GetComponent<Image>().sprite = CurrentSnake.Skin.Body;
-            SnakeView.GetChild(2).GetComponent<Image>().sprite = CurrentSnake.Skin.Angle;
-            SnakeView.GetChild(3).GetComponent<Image>().sprite = CurrentSnake.Skin.Angle;
-            SnakeView.GetChild(4).GetComponent<Image>().sprite = CurrentSnake.Skin.Body;
-            SnakeView.GetChild(5).GetComponent<Image>().sprite = CurrentSnake.Skin.Angle;
-            SnakeView.GetChild(6).GetComponent<Image>().sprite = CurrentSnake.Skin.Angle;
-            SnakeView.GetChild(7).GetComponent<Image>().sprite = CurrentSnake.Skin.Body;
-            SnakeView.GetChild(8).GetComponent<Image>().sprite = CurrentSnake.Skin.Tail;
+            SnakeView.transform.GetChild(0).gameObject.SetActive(true);
+            SnakeView.transform.GetChild(0).GetComponent<Image>().sprite = CurrentSnake.Skin.Head;
+
+            for (int i = 1; i<CurrentSnake.ModulesSlots+2;i++)
+            {
+                SnakeView.transform.GetChild(i).gameObject.SetActive(true);
+                if (i == CurrentSnake.ModulesSlots+1)
+                {
+                    SnakeView.transform.GetChild(i).localRotation = Quaternion.Euler(0, 0, _tailRotations[i-4]);
+                    SnakeView.transform.GetChild(i).GetComponent<Image>().sprite = CurrentSnake.Skin.Tail;
+                    SnakeView.transform.GetChild(i).GetChild(0).gameObject.SetActive(false);
+                }
+                else
+                {
+                    if (i>3)
+                    {
+                        SnakeView.transform.GetChild(i).localRotation = Quaternion.Euler(0, 0, _bodyRotations[i - 4]);
+                    }
+                    if (i%4 == 1 || i%4 == 2)
+                    {
+                        SnakeView.transform.GetChild(i).GetComponent<Image>().sprite = CurrentSnake.Skin.Body;
+                    }
+                    else
+                    {
+                        SnakeView.transform.GetChild(i).GetComponent<Image>().sprite = CurrentSnake.Skin.Angle;
+                    }
+                    SnakeView.transform.GetChild(i).GetChild(0).gameObject.SetActive(true);
+                }
+
+            }
         }
-			
+
+
+        int j = 0;
+        foreach (SnakeModuleSlot s in SnakeView.GetComponentsInChildren<SnakeModuleSlot>())
+        {
+            LogicModules lm = null;
+            if (CurrentSnake!=null && j<CurrentSnake.ModulesSlots)
+            {
+                lm = CurrentSnake.Modules[j];
+            }
+            s.SetSlot(lm);
+            j++;
+        }
     }
 
     public void OpenEditor()
@@ -108,7 +173,45 @@ public class SnakeEditor : MonoBehaviour
             SnakeUpdated();
         }
         UpdateModules();
-        
+
+        Player.Instance.OnMoneyChanged += MoneyChanged;
+        UpdateNewSnakeButton();
+        UpdateAddSlotButton();
+    }
+
+    private void Start()
+    {
+        UpdateAddSlotButton();
+    }
+
+    public void AddSlot()
+    {
+        Player.Instance.Money-= DefaultResources.GetSlotCost(CurrentSnake.ModulesSlots);
+        CurrentSnake.ModulesSlots++;
+        UpdateSnakeView();
+    }
+
+    private void MoneyChanged()
+    {
+        UpdateAddSlotButton();
+    }
+
+    private void UpdateAddSlotButton()
+    {
+        AddSlotButton.gameObject.SetActive(CurrentSnake!=null && CurrentSnake.ModulesSlots!=9);
+        if (AddSlotButton.isActiveAndEnabled)
+        {
+            AddSlotButton.transform.GetChild(3).GetComponent<Text>().text = "" + DefaultResources.GetSlotCost(CurrentSnake.ModulesSlots);
+        }       
+    }
+
+    private void UpdateNewSnakeButton()
+    {
+        CreateButton.gameObject.SetActive(Player.Instance.Snakes.Count<5);
+        if (CreateButton.isActiveAndEnabled)
+        {
+            CreateButton.transform.GetChild(2).GetComponent<Text>().text = "" + DefaultResources.GetSnakeCost(Player.Instance.Snakes.Count);
+        }
     }
 
     public void CloseEditor()
@@ -157,19 +260,29 @@ public class SnakeEditor : MonoBehaviour
     public void CreateSnake()
     {
 		Player.Instance.CreateSnake();
+        UpdateNewSnakeButton();
     }
 
-    public void SetModule(int id)
+    public void SetModule(SnakeModuleSlot slot)
     {
-        if (_selectedModule!=null)
+        if (slot.Module != null)
         {
-            //place module in slot
+            Player.Instance.Modules.Add(slot.Module);
+            Modules.UpdateList(Player.Instance.Modules);
+            slot.SetSlot(null);
         }
 
-        if (CurrentSnake.Modules[id]!=null)
+
+        if (_selectedModule!=null)
         {
-            //move module to inventory
+            Player.Instance.Modules.Remove(_selectedModule);
+            slot.SetSlot(_selectedModule);
+            CurrentSnake.Modules[slot.transform.parent.GetSiblingIndex()-1] = _selectedModule;
+            _selectedModule = null;
+            Modules.UpdateList(Player.Instance.Modules);
         }
+
+        
     }
 
 	public void ChangeSnake(int step)
@@ -184,4 +297,5 @@ public class SnakeEditor : MonoBehaviour
             CurrentSnake.NickName = SnakeName.text;
         }
     }
+
 }
