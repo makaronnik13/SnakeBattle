@@ -7,6 +7,7 @@ using Utils;
 
 public class Board : MonoBehaviour, IEnumerable<Tile>
 {
+    private BoardTemplate _template;
     /// <summary>
     /// RectTransform of the board.
     /// </summary>
@@ -170,14 +171,23 @@ public class Board : MonoBehaviour, IEnumerable<Tile>
     /// </summary>
     public void Reset(BoardTemplate template)
     {
+        _template = template;
         Columns = template.Cells.Count;
-        Rows = template.Cells[0].Count;
+        Rows = template.Cells[0].raw.Count;
         UpdateTiles();
         for (int i = 0; i< Columns; i++)
         {
             for (int j = 0; j < Rows; j++)
             {
-                this[i, j].SetTile(template.Cells[i][j]);
+                if (template.Cells[i].raw[j].element == LogicElement.LogicElementType.MyHead || template.Cells[i].raw[j].element == LogicElement.LogicElementType.MyBody)
+                {
+                    this[i, j].Init(template.Tiles.FirstOrDefault(t=>t.element == LogicElement.LogicElementType.None));
+                }
+                else
+                {
+                    this[i, j].Init(template.Cells[i].raw[j]);
+                }
+                
             }
         }
         

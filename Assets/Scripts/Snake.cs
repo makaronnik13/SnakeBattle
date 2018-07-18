@@ -48,28 +48,7 @@ public class Snake : IEnumerable<IntVector2>
         body = new LinkedList<IntVector2>();
     }
 
-    /// <summary>
-    /// Hides the snake.
-    /// </summary>
-    public void Hide()
-    {
-        foreach (var p in body)
-        {
-            board[p].ContentHidden = true;
-        }
-    }
-
-    /// <summary>
-    /// Shows the snake.
-    /// </summary>
-    public void Show()
-    {
-        foreach (var p in body)
-        {
-            board[p].ContentHidden = false;
-        }
-    }
-
+   
     /// <summary>
     /// Resets snake to original position.
     /// </summary>

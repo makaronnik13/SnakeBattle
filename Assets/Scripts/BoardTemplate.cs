@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Snake/Board")]
@@ -20,9 +21,9 @@ public class BoardTemplate : ScriptableObject
             List<Vector2> heads = new List<Vector2>();
             for (int i = 0; i < Cells.Count; i++)
             {
-                for (int j = 0; j < Cells[0].Count; j++)
+                for (int j = 0; j < Cells[0].raw.Count; j++)
                 {
-                    if (Cells[i][j] == LogicElement.LogicElementType.MyHead)
+                    if (Cells[i].raw[j].element == LogicElement.LogicElementType.MyHead)
                     {
                         heads.Add(new Vector2(i, j));
                     }
@@ -33,23 +34,41 @@ public class BoardTemplate : ScriptableObject
     }
 
     [SerializeField]
-    private List<List<LogicElement.LogicElementType>> _cells;
+    private List<ListColumn> _cells;
 
+    [SerializeField]
+    private List<ElementPair> _tiles;
 
+    public List<ElementPair> Tiles
+    {
+        get
+        {
+            if (_tiles == null)
+            {
+                _tiles = new List<ElementPair>();
+                _tiles.Add(new ElementPair(LogicElement.LogicElementType.None, DefaultResources.GetElementByEnum(LogicElement.LogicElementType.None).Img));
+                _tiles.Add(new ElementPair(LogicElement.LogicElementType.Wall, DefaultResources.GetElementByEnum(LogicElement.LogicElementType.Wall).Img));
+                _tiles.Add(new ElementPair(LogicElement.LogicElementType.MyHead, DefaultResources.GetElementByEnum(LogicElement.LogicElementType.MyHead).Img));
+                _tiles.Add(new ElementPair(LogicElement.LogicElementType.MyBody, DefaultResources.GetElementByEnum(LogicElement.LogicElementType.MyBody).Img));
+                _tiles.Add(new ElementPair(LogicElement.LogicElementType.MyTail, DefaultResources.GetElementByEnum(LogicElement.LogicElementType.MyTail).Img));
+            }
+            return _tiles;
+        }
+    }
 
     public void Setize(int w, int h)
     {
-        List<List<LogicElement.LogicElementType>> newCells = new List<List<LogicElement.LogicElementType>>();
+        List<ListColumn> newCells = new List<ListColumn>();
 
         for (int i = 0; i<w; i++)
         {
-            List<LogicElement.LogicElementType> l = new List<LogicElement.LogicElementType>();
+            ListColumn l = new ListColumn(new List<ElementPair>());
             for (int j = 0; j < h; j++)
             {
-                l.Add(LogicElement.LogicElementType.None);
+                l.raw.Add(Tiles.FirstOrDefault(p => p.element == LogicElement.LogicElementType.None));
                 if (i == 0 || j == 0 || i == w-1 || j == h-1)
                 {
-                    l[l.Count-1] = LogicElement.LogicElementType.Wall;
+                    l.raw[l.raw.Count-1] = Tiles.FirstOrDefault(p => p.element == LogicElement.LogicElementType.Wall);
                 }
             }
             newCells.Add(l);
@@ -58,23 +77,23 @@ public class BoardTemplate : ScriptableObject
         _cells = newCells;
     }
 
-    public List<List<LogicElement.LogicElementType>> Cells
+    public List<ListColumn> Cells
     {
         get
         {
             if (_cells == null)
             {
                 Debug.Log("new cells");
-                _cells = new List<List<LogicElement.LogicElementType>>();
+                _cells = new List<ListColumn>();
                 for (int i = 0; i < 10; i++)
                 {
-                    List<LogicElement.LogicElementType> l = new List<LogicElement.LogicElementType>();
+                    ListColumn l = new ListColumn(new List<ElementPair>());
                     for (int j = 0; j < 10; j++)
                     {
-                        l.Add(LogicElement.LogicElementType.None);
+                        l.raw.Add(Tiles.FirstOrDefault(p=>p.element == LogicElement.LogicElementType.None));
                         if (i == 0 || j == 0 || i == 10 - 1 || j == 10 - 1)
                         {
-                            l[l.Count - 1] = LogicElement.LogicElementType.Wall;
+                            l.raw[l.raw.Count - 1] = Tiles.FirstOrDefault(p => p.element == LogicElement.LogicElementType.Wall);
                         }
                     }
                     _cells.Add(l);
@@ -91,14 +110,14 @@ public class BoardTemplate : ScriptableObject
     {
         for (int i = 0; i < Cells.Count; i++)
         {
-            _cells[0][i] = LogicElement.LogicElementType.Wall;
-            _cells[Cells[0].Count-1][i] = LogicElement.LogicElementType.Wall;
+            _cells[0].raw[i] = Tiles.FirstOrDefault(p => p.element == LogicElement.LogicElementType.Wall);
+            _cells[Cells[0].raw.Count-1].raw[i] = Tiles.FirstOrDefault(p => p.element == LogicElement.LogicElementType.Wall);
         }
 
-        for (int i = 0; i < Cells[0].Count; i++)
+        for (int i = 0; i < Cells[0].raw.Count; i++)
         {
-            _cells[i][0] = LogicElement.LogicElementType.Wall;
-            _cells[i][Cells.Count - 1] = LogicElement.LogicElementType.Wall;
+            _cells[i].raw[0] = Tiles.FirstOrDefault(p => p.element == LogicElement.LogicElementType.Wall);
+            _cells[i].raw[Cells.Count - 1] = Tiles.FirstOrDefault(p => p.element == LogicElement.LogicElementType.Wall);
         }
     }
 
@@ -117,22 +136,22 @@ public class BoardTemplate : ScriptableObject
 
     private Vector2 GetNextPosition(Vector2 head)
     {
-        if (Cells[(int)head.x - 1][(int)head.y] == LogicElement.LogicElementType.MyBody)
+        if (Cells[(int)head.x - 1].raw[(int)head.y].element == LogicElement.LogicElementType.MyBody)
         {
             return new Vector2((int)head.x - 1, (int)head.y);
         }
 
-        if (Cells[(int)head.x + 1][(int)head.y] == LogicElement.LogicElementType.MyBody)
+        if (Cells[(int)head.x + 1].raw[(int)head.y].element == LogicElement.LogicElementType.MyBody)
         {
             return new Vector2((int)head.x + 1, (int)head.y);
         }
 
-        if (Cells[(int)head.x][(int)head.y+1] == LogicElement.LogicElementType.MyBody)
+        if (Cells[(int)head.x].raw[(int)head.y+1].element == LogicElement.LogicElementType.MyBody)
         {
             return new Vector2((int)head.x, (int)head.y + 1);
         }
 
-        if (Cells[(int)head.x][(int)head.y - 1] == LogicElement.LogicElementType.MyBody)
+        if (Cells[(int)head.x].raw[(int)head.y - 1].element == LogicElement.LogicElementType.MyBody)
         {
             return new Vector2((int)head.x, (int)head.y - 1);
         }
@@ -140,8 +159,31 @@ public class BoardTemplate : ScriptableObject
         throw new Exception("No avaliable slots on map!");
     }
 
-    public void SetCell(LogicElement.LogicElementType t, int x, int y)
+    public void SetCell(ElementPair t, int x, int y)
     {
-        _cells[x][y] = t;
+        _cells[x].raw[y] = t;
+    }
+}
+
+    [System.Serializable]
+    public class ElementPair
+    {
+        public LogicElement.LogicElementType element;
+        public Sprite image;
+
+        public ElementPair(LogicElement.LogicElementType element, Sprite image)
+        {
+            this.element = element;
+            this.image = image;
+        }
+    }
+
+[System.Serializable]
+public class ListColumn
+{
+    public List<ElementPair> raw;
+    public ListColumn(List<ElementPair> raw)
+    {
+        this.raw = raw;
     }
 }

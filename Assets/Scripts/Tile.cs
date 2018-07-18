@@ -7,21 +7,12 @@ using Utils;
 public class Tile : MonoBehaviour
 {
     /// <summary>
-    /// Sprite for empty tile.
-    /// </summary>
-    public RandomSprite[] Empty;
-
-    public Sprite Bug, Wall, Batery, Crustling;
-
-    /// <summary>
     /// Image component of this GameObject.
     /// </summary>
     private Image image;
 
-    /// <summary>
-    /// Holds last displayed image.
-    /// </summary>
-    private Sprite lastUsedImage;
+ 
+    private Sprite _baseSprite;
 
     private RectTransform _rectTransform;
     private LogicElement.LogicElementType _content;
@@ -34,6 +25,10 @@ public class Tile : MonoBehaviour
     {
         get
         {
+            if (!_rectTransform)
+            {
+                _rectTransform = GetComponent<RectTransform>();
+            }
             return _rectTransform;
         }
     }
@@ -49,50 +44,37 @@ public class Tile : MonoBehaviour
         }
     }
 
-    public void SetTile(LogicElement.LogicElementType content, SnakeSkin skin = null)
+    public void SetTile(LogicElement.LogicElementType t, SnakeSkin skin = null)
     {
-        _content = content;
+        _content = t;
         ZRotation = 0;
-        switch (_content)
+        switch (t)
         {
-            case LogicElement.LogicElementType.None:
-                image.sprite = RandomSprite.GetRandomSprite(Empty);
-                break;
-            case LogicElement.LogicElementType.Bug:
-                image.sprite = Bug;
-                break;
-            case LogicElement.LogicElementType.Crustling:
-                image.sprite = Crustling;
-                break;
-            case LogicElement.LogicElementType.Batery:
-                image.sprite = Batery;
-                break;
             case LogicElement.LogicElementType.MyBody:
                 if (skin == null)
                 {
-                    image.sprite = RandomSprite.GetRandomSprite(Empty);
+                    image.sprite = _baseSprite;
+                    break;
                 }
                 image.sprite = skin.Body;
                 break;
             case LogicElement.LogicElementType.MyHead:
                 if (skin == null)
                 {
-                    image.sprite = RandomSprite.GetRandomSprite(Empty);
+                    image.sprite = _baseSprite;
+                    break;
                 }
                 image.sprite = skin.Head;
                 break;
             case LogicElement.LogicElementType.MyTail:
                 if (skin == null)
                 {
-                    image.sprite = RandomSprite.GetRandomSprite(Empty);
+                    image.sprite = _baseSprite;
+                    break;
                 }
                 image.sprite = skin.Tail;
                 break;
-            case LogicElement.LogicElementType.Wall:
-                image.sprite = Wall;
-                break;
         }
-        lastUsedImage = image.sprite;
     }
 
     private float _zRotation = 0;
@@ -113,49 +95,15 @@ public class Tile : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// If true tile's content will be hidden (as if content was empty). Used for blinking.
-    /// </summary>
-    public bool ContentHidden
-    {
-        get
-        {
-            return _contentHidden;
-        }
-        set
-        {
-            _contentHidden = value;
-            if (value)
-            {
-                image.sprite = RandomSprite.GetRandomSprite(Empty); ;
-            }
-            else
-            {
-                image.sprite = lastUsedImage;
-            }
-        }
-    }
 
     // Use this for initialization
-    void Awake()
+    public void Init(ElementPair s)
     {
+        _content = s.element;
         image = GetComponent<Image>();
-        _rectTransform = GetComponent<RectTransform>();
-        SetTile(LogicElement.LogicElementType.None);
-        _contentHidden = false;
+        _baseSprite = s.image;
+        image.sprite = _baseSprite;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-    /// <summary>
-    /// Resets tile to original conditions.
-    /// </summary>
-    public void Reset()
-    {
-        SetTile(LogicElement.LogicElementType.None);
-    }
+ 
 }
