@@ -58,6 +58,6 @@ public class LogicElement:ScriptableObject
 
     public static bool IsExtend(LogicElementType content)
     {
-        return !_extended.Contains(content);
+        return _extended.Contains(content);
     }
 }

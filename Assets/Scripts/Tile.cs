@@ -15,8 +15,7 @@ public class Tile : MonoBehaviour
     private Sprite _baseSprite;
 
     private RectTransform _rectTransform;
-    private LogicElement.LogicElementType _content;
-    private bool _contentHidden;
+    public LogicElement.LogicElementType _content;
 
     /// <summary>
     /// Rect Transform component of this tile.
@@ -96,7 +95,7 @@ public class Tile : MonoBehaviour
                 break;
             case LogicElement.LogicElementType.None:
                 img.sprite = _baseSprite;
-                if (img == frontImage)
+                if (top)
                 {
                     img.color = new Color(1,1,1,0);
                 }

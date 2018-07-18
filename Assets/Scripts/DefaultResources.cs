@@ -52,7 +52,7 @@ public static class DefaultResources
     public static Sprite GetModuleSprite(LogicModules lm)
     {
         //compare modules by size
-        return Modules.FirstOrDefault(l=>l.Size == lm.Size).Img;
+        return Modules.FirstOrDefault(l=>l.ModuleHolderName == lm.IdName).Img;
     }
 
     private static List<LogicElement> _elements;

@@ -157,6 +157,7 @@ public class SnakeEditor : MonoBehaviour
             s.SetSlot(lm);
             j++;
         }
+        UpdateModules();
     }
 
     public void OpenEditor()

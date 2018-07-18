@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -87,6 +88,7 @@ public class Snake : IEnumerable<Vector2Int>
         bool extend = LogicElement.IsExtend(board[newHead].Content);
 
         body.AddLast(newHead);
+
 
         if (extend)
         {
@@ -180,6 +182,7 @@ public class Snake : IEnumerable<Vector2Int>
             current = current.Previous;
         }
 
+
         // Handle tail
         var tailPosition = body.First.Value;
         var previousPosition = body.First.Next.Value;
@@ -250,8 +253,26 @@ public class Snake : IEnumerable<Vector2Int>
             return Vector2Int.zero;
         }
 
-        int randomValue = Mathf.RoundToInt(Random.Range(0, avaliableDirections.Count));
+        avaliableDirections = GetDirectionByModules(avaliableDirections);
+
+        int randomValue = Mathf.RoundToInt(UnityEngine.Random.Range(0, avaliableDirections.Count));
      
         return avaliableDirections[randomValue];
+    }
+
+    private List<Vector2Int> GetDirectionByModules(List<Vector2Int> avaliableDirections)
+    {
+        foreach (LogicModules module in Profile.Modules)
+        {
+            foreach (Vector2Int dir in avaliableDirections)
+            {
+                if (module.CanMoveInThisDirection(Head, dir, board))
+                {
+                    return new List<Vector2Int>() { dir };
+                }
+            }
+        }
+
+        return avaliableDirections;
     }
 }

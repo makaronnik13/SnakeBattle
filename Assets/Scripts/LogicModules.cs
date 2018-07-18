@@ -18,9 +18,11 @@ public class LogicModules
 
     public Action<LogicElement.LogicElementType, Vector2> OnElementSeted = (LogicElementType, Vector2) => { };
     public Action<LogicModules, int> OnSubmoduleSeted = (LogicElementType, Vector2) => { };
+    public string IdName;
 
     public LogicModules(ModuleHolder mholder)
     {
+        IdName = mholder.ModuleHolderName;
         this.Size = mholder.Size;
 
         ModuleType = mholder.moduleType;
@@ -68,4 +70,17 @@ public class LogicModules
         Submodules[id] = submodule;
         OnSubmoduleSeted(submodule, id);
     }
+
+    public bool CanMoveInThisDirection(Vector2Int head, Vector2Int dir, Board board)
+    {
+        if (ModuleType == ModuleHolder.ModuleType.Simple)
+        {
+            LogicElement.LogicElementType[,] boardCells = new LogicElement.LogicElementType[Size, Size];
+     
+        }
+
+        return false;
+    }
+
+
 }
