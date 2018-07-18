@@ -86,8 +86,7 @@ public class Game : MonoBehaviour
 
                 if (x >= 0 && x < Board.Columns && y >= 0 && y < Board.Rows)
                 {
-
-                    //snake.Move(dir, false);
+                    snake.Move(dir, false);
                 }
                 else
                 {

@@ -4,12 +4,12 @@ using System.Linq;
 using UnityEngine;
 using Utils;
 
-public class Snake : IEnumerable<IntVector2>
+public class Snake : IEnumerable<Vector2Int>
 {
     /// <summary>
     /// Queue holding snake's body parts positions.
     /// </summary>
-    private LinkedList<IntVector2> body;
+    private LinkedList<Vector2Int> body;
 
   
     /// <summary>
@@ -22,7 +22,7 @@ public class Snake : IEnumerable<IntVector2>
     /// <summary>
     /// Gets snake's head position.
     /// </summary>
-    public IntVector2 Head
+    public Vector2Int Head
     {
         get
         {
@@ -33,7 +33,7 @@ public class Snake : IEnumerable<IntVector2>
     /// <summary>
     /// All body parts positions without last element.
     /// </summary>
-    public IEnumerable<IntVector2> WithoutTail
+    public IEnumerable<Vector2Int> WithoutTail
     {
         get
         {
@@ -45,14 +45,14 @@ public class Snake : IEnumerable<IntVector2>
     {
         Profile = profile;
         this.board = board;
-        body = new LinkedList<IntVector2>();
+        body = new LinkedList<Vector2Int>();
     }
 
    
     /// <summary>
     /// Resets snake to original position.
     /// </summary>
-    public void Reset(List<Vector2> positions)
+    public void Reset(List<Vector2Int> positions)
     {
         foreach (var p in body)
         {
@@ -61,9 +61,9 @@ public class Snake : IEnumerable<IntVector2>
 
         body.Clear();
 
-        foreach (Vector2 position in positions)
+        foreach (Vector2Int position in positions)
         {
-            body.AddLast(position);
+            body.AddFirst(position);
         }
 
         UpdateSnakeState();
@@ -74,9 +74,15 @@ public class Snake : IEnumerable<IntVector2>
     /// </summary>
     /// <param name="direction">direction of movement</param>
     /// <param name="extend">if true snake will be extended by one segment</param>
-    public void Move(IntVector2 direction, bool extend)
+    public void Move(Vector2Int direction, bool extend)
     {
         var newHead = NextHeadPosition(direction);
+
+        if (!LogicElement.IsWalkable(board[newHead].Content))
+        {
+            return;
+        }
+       
 
         body.AddLast(newHead);
 
@@ -86,8 +92,7 @@ public class Snake : IEnumerable<IntVector2>
         }
         else
         {
-            body.Remove(body.First.Value);
-            board[body.First.Value].SetTile(LogicElement.LogicElementType.None);
+            board[body.First.Value].SetTile(LogicElement.LogicElementType.None, true);
             body.RemoveFirst();
         }
 
@@ -99,12 +104,13 @@ public class Snake : IEnumerable<IntVector2>
     /// </summary>
     private void UpdateSnakeState()
     {
+
         // Handle head
         var headPosition = body.Last.Value;
         var nextPosition = body.Last.Previous.Value;
 
         var tile = board[headPosition];
-        tile.SetTile(LogicElement.LogicElementType.MyHead, Profile.Skin);
+        tile.SetTile(LogicElement.LogicElementType.MyHead, true, Profile.Skin);
 
         if (nextPosition.y > headPosition.y)
         {
@@ -133,19 +139,19 @@ public class Snake : IEnumerable<IntVector2>
             if (previous.Value.x == next.Value.x)
             {
                 
-                tile.SetTile(LogicElement.LogicElementType.MyBody, Profile.Skin);
+                tile.SetTile(LogicElement.LogicElementType.MyBody, true, Profile.Skin);
      
                 tile.ZRotation = 0;
             }
             else if (previous.Value.y == next.Value.y)
             {        
-                tile.SetTile(LogicElement.LogicElementType.MyBody, Profile.Skin);
+                tile.SetTile(LogicElement.LogicElementType.MyBody, true, Profile.Skin);
                 tile.ZRotation = 90;
             }
             else
             {
               
-                tile.SetTile(LogicElement.LogicElementType.MyAngle, Profile.Skin);
+                tile.SetTile(LogicElement.LogicElementType.MyAngle, true, Profile.Skin);
 
                 if ((previous.Value.x > current.Value.x && next.Value.y < current.Value.y) || (next.Value.x > current.Value.x && previous.Value.y < current.Value.y))
                 {
@@ -165,7 +171,7 @@ public class Snake : IEnumerable<IntVector2>
                 }
                 else
                 {
-                    tile.SetTile(LogicElement.LogicElementType.MyHead, Profile.Skin);
+                    tile.SetTile(LogicElement.LogicElementType.MyHead, true, Profile.Skin);
                 }
             }
             previous = current;
@@ -177,7 +183,7 @@ public class Snake : IEnumerable<IntVector2>
         var previousPosition = body.First.Next.Value;
 
         tile = board[tailPosition];
-        tile.SetTile(LogicElement.LogicElementType.MyTail, Profile.Skin);
+        tile.SetTile(LogicElement.LogicElementType.MyTail, true, Profile.Skin);
 
         if (previousPosition.y > tailPosition.y)
         {
@@ -202,44 +208,48 @@ public class Snake : IEnumerable<IntVector2>
     /// </summary>
     /// <param name="direction">direction of movement</param>
     /// <returns></returns>
-    public IntVector2 NextHeadPosition(IntVector2 direction)
+    public Vector2Int NextHeadPosition(Vector2Int direction)
     {
-        return Head + new IntVector2(direction.x, -direction.y);
+        return Head + new Vector2Int(direction.x, direction.y);
     }
 
-    public IEnumerator<IntVector2> GetEnumerator()
+    public IEnumerator<Vector2Int> GetEnumerator()
     {
-        return ((IEnumerable<IntVector2>)body).GetEnumerator();
+        return ((IEnumerable<Vector2Int>)body).GetEnumerator();
     }
 
     IEnumerator IEnumerable.GetEnumerator()
     {
-        return ((IEnumerable<IntVector2>)body).GetEnumerator();
+        return ((IEnumerable<Vector2Int>)body).GetEnumerator();
     }
 
-    public IntVector2 GetDirection()
+    public Vector2Int GetDirection()
     {
-        IntVector2 result = new IntVector2();
-
-        int randomValue = Mathf.RoundToInt(Random.Range(0, 3));
-
-
-        switch (randomValue)
+        List<Vector2Int> avaliableDirections = new List<Vector2Int>
         {
-            case 0:
-                result = Vector2.up;
-                break;
-            case 1:
-                result = Vector2.down;
-                break;
-            case 2:
-                result = Vector2.left;
-                break;
-            case 3:
-                result = Vector2.right;
-                break;
+            Vector2Int.up,
+            Vector2Int.down,
+            Vector2Int.left,
+            Vector2Int.right
+        };
+
+        //remove not walkable tiles
+        for (int i = 3; i>= 0; i--)
+        {
+            if (!LogicElement.IsWalkable(board[Head+avaliableDirections[i]].Content))
+            {
+                avaliableDirections.Remove(avaliableDirections[i]);
+            }
         }
 
-        return result;
+        //return if ther is no walkable tiles near
+        if (avaliableDirections.Count == 0)
+        {
+            return Vector2Int.zero;
+        }
+
+        int randomValue = Mathf.RoundToInt(Random.Range(0, avaliableDirections.Count));
+     
+        return avaliableDirections[randomValue];
     }
 }

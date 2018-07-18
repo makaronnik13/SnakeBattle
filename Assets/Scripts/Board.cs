@@ -43,7 +43,7 @@ public class Board : MonoBehaviour, IEnumerable<Tile>
     /// <summary>
     /// All possible positions in board.
     /// </summary>
-    public IEnumerable<IntVector2> Positions
+    public IEnumerable<Vector2Int> Positions
     {
         get
         {
@@ -55,7 +55,7 @@ public class Board : MonoBehaviour, IEnumerable<Tile>
                 x = 0;
                 for (int j = 0; j < Columns; j++)
                 {
-                    yield return new IntVector2(x, y);
+                    yield return new Vector2Int(x, y);
 
                     x++;
                 }
@@ -68,7 +68,7 @@ public class Board : MonoBehaviour, IEnumerable<Tile>
     /// <summary>
     /// All empty positions (all positions where tile's content is empty).
     /// </summary>
-    public IEnumerable<IntVector2> EmptyPositions
+    public IEnumerable<Vector2Int> EmptyPositions
     {
         get
         {
@@ -158,7 +158,7 @@ public class Board : MonoBehaviour, IEnumerable<Tile>
     /// </summary>
     /// <param name="position">coordinates of wanted tile</param>
     /// <returns>tile at given position</returns>
-    public Tile this[IntVector2 position]
+    public Tile this[Vector2Int position]
     {
         get
         {

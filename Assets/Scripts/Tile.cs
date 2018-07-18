@@ -10,7 +10,7 @@ public class Tile : MonoBehaviour
     /// Image component of this GameObject.
     /// </summary>
     private Image image;
-
+    private Image frontImage;
  
     private Sprite _baseSprite;
 
@@ -44,8 +44,20 @@ public class Tile : MonoBehaviour
         }
     }
 
-    public void SetTile(LogicElement.LogicElementType t, SnakeSkin skin = null)
+    public void SetTile(LogicElement.LogicElementType t, bool top = false, SnakeSkin skin = null)
     {
+        Image img = image;
+        if (top)
+        {
+            img = frontImage;
+        }
+
+        if (top)
+        {
+            img.color = new Color(1, 1, 1, 1);
+        }
+
+
         _content = t;
         ZRotation = 0;
         switch (t)
@@ -53,26 +65,41 @@ public class Tile : MonoBehaviour
             case LogicElement.LogicElementType.MyBody:
                 if (skin == null)
                 {
-                    image.sprite = _baseSprite;
+                    img.sprite = _baseSprite;
                     break;
                 }
-                image.sprite = skin.Body;
+                img.sprite = skin.Body;
                 break;
             case LogicElement.LogicElementType.MyHead:
                 if (skin == null)
                 {
-                    image.sprite = _baseSprite;
+                    img.sprite = _baseSprite;
                     break;
                 }
-                image.sprite = skin.Head;
+                img.sprite = skin.Head;
                 break;
             case LogicElement.LogicElementType.MyTail:
                 if (skin == null)
                 {
-                    image.sprite = _baseSprite;
+                    img.sprite = _baseSprite;
                     break;
                 }
-                image.sprite = skin.Tail;
+                img.sprite = skin.Tail;
+                break;
+            case LogicElement.LogicElementType.MyAngle:
+                if (skin == null)
+                {
+                    img.sprite = _baseSprite;
+                    break;
+                }
+                img.sprite = skin.Angle;
+                break;
+            case LogicElement.LogicElementType.None:
+                img.sprite = _baseSprite;
+                if (img == frontImage)
+                {
+                    img.color = new Color(1,1,1,0);
+                }
                 break;
         }
     }
@@ -101,6 +128,7 @@ public class Tile : MonoBehaviour
     {
         _content = s.element;
         image = GetComponent<Image>();
+        frontImage = transform.GetChild(0).GetComponent<Image>();
         _baseSprite = s.image;
         image.sprite = _baseSprite;
     }

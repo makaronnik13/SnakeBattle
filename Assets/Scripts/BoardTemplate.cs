@@ -14,18 +14,18 @@ public class BoardTemplate : ScriptableObject
             return Heads.Count;
         }
     }
-    public List<Vector2> Heads
+    public List<Vector2Int> Heads
     {
         get
         {
-            List<Vector2> heads = new List<Vector2>();
+            List<Vector2Int> heads = new List<Vector2Int>();
             for (int i = 0; i < Cells.Count; i++)
             {
                 for (int j = 0; j < Cells[0].raw.Count; j++)
                 {
                     if (Cells[i].raw[j].element == LogicElement.LogicElementType.MyHead)
                     {
-                        heads.Add(new Vector2(i, j));
+                        heads.Add(new Vector2Int(i, j));
                     }
                 }
             }
@@ -121,40 +121,48 @@ public class BoardTemplate : ScriptableObject
         }
     }
 
-    public List<Vector2> GetSnakeBasePositions(int id, int length)
+    public List<Vector2Int> GetSnakeBasePositions(int id, int length)
     {
-        List<Vector2> v = new List<Vector2>();
-        Vector2 head = Heads[id];
-        Vector2 lastPos = head;
+        List<Vector2Int> v = new List<Vector2Int>();
+        Vector2Int head = Heads[id];
+        Vector2Int lastPos = head;
         for (int i = 0; i< length; i++)
         {
             v.Add(lastPos);
-            lastPos = GetNextPosition(lastPos);
+            lastPos = GetNextPosition(lastPos, v);
         }
+
         return v;
     }
 
-    private Vector2 GetNextPosition(Vector2 head)
+    private Vector2Int GetNextPosition(Vector2 head, List<Vector2Int> positions)
     {
-        if (Cells[(int)head.x - 1].raw[(int)head.y].element == LogicElement.LogicElementType.MyBody)
+
+        Vector2Int v = new Vector2Int((int)head.x - 1, (int)head.y);
+        if (Cells[v.x].raw[v.y].element == LogicElement.LogicElementType.MyBody && !positions.Contains(v))
         {
-            return new Vector2((int)head.x - 1, (int)head.y);
+            return v;
         }
 
-        if (Cells[(int)head.x + 1].raw[(int)head.y].element == LogicElement.LogicElementType.MyBody)
+        v = new Vector2Int((int)head.x, (int)head.y-1);
+        if (Cells[v.x].raw[v.y].element == LogicElement.LogicElementType.MyBody && !positions.Contains(v))
         {
-            return new Vector2((int)head.x + 1, (int)head.y);
+            return v;
         }
 
-        if (Cells[(int)head.x].raw[(int)head.y+1].element == LogicElement.LogicElementType.MyBody)
+        v = new Vector2Int((int)head.x + 1, (int)head.y);
+        if (Cells[v.x].raw[v.y].element == LogicElement.LogicElementType.MyBody && !positions.Contains(v))
         {
-            return new Vector2((int)head.x, (int)head.y + 1);
+            return v;
         }
 
-        if (Cells[(int)head.x].raw[(int)head.y - 1].element == LogicElement.LogicElementType.MyBody)
+        v = new Vector2Int((int)head.x, (int)head.y+1);
+        if (Cells[v.x].raw[v.y].element == LogicElement.LogicElementType.MyBody && !positions.Contains(v))
         {
-            return new Vector2((int)head.x, (int)head.y - 1);
+            return v;
         }
+
+     
 
         throw new Exception("No avaliable slots on map!");
     }

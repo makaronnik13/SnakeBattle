@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 [CreateAssetMenu(menuName = "Snake/Element")]
 public class LogicElement:ScriptableObject
@@ -22,10 +24,26 @@ public class LogicElement:ScriptableObject
         EnemyAngle = 12
     }
 
+    private static List<LogicElementType> _notWalkable = new List<LogicElementType>()
+    {
+        LogicElementType.EnemyAngle,
+        LogicElementType.EnemyBody,
+        LogicElementType.EnemyHead,
+        LogicElementType.MyAngle,
+        LogicElementType.MyBody,
+        LogicElementType.MyHead,
+        LogicElementType.Wall
+    };
+
     public LogicElementType ElementType;
     public string ElementName;
     public Sprite Img;
     public string Description;
     public int ElementCost;
     public bool HideInShop = false;
+
+    public static bool IsWalkable(LogicElementType content)
+    {
+        return  !_notWalkable.Contains(content);
+    }
 }
