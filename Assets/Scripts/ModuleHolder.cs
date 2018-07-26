@@ -12,13 +12,7 @@ public class ModuleHolder: ScriptableObject
 
     public ModuleType moduleType;
 
-    public  enum BaseModuleOperator
-    {
-        Or,
-        And
-    }
-
-    public BaseModuleOperator Operator;
+  
     public int Size;
     public int Cost;
     public string ModuleHolderName;

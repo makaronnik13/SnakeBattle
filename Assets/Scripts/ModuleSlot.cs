@@ -48,7 +48,7 @@ public class ModuleSlot : MonoBehaviour
     private void OnEnable()
     {
         _ownerModule = GetComponentInParent<ModulesEditor>().EditingModule;
-        _ownerModule.OnElementSeted += ElementChanged;
+        ((SimpleModule)_ownerModule).OnElementSeted += ElementChanged;
     }
 
     private void ElementChanged(LogicElement.LogicElementType elType, Vector2 pos)
@@ -64,7 +64,7 @@ public class ModuleSlot : MonoBehaviour
 
     private void OnDisable()
     {
-        _ownerModule.OnElementSeted -= ElementChanged;         
+        ((SimpleModule)_ownerModule).OnElementSeted -= ElementChanged;         
     }
 
 }

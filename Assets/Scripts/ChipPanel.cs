@@ -22,15 +22,15 @@ public class ChipPanel : MonoBehaviour {
         }
     }
 
-    public LogicModules _editingModule
+    public SimpleModule _editingModule
     {
             get
             {
-                return GetComponentInParent<ModulesEditor>().EditingModule;
+                return (SimpleModule)GetComponentInParent<ModulesEditor>().EditingModule;
             }
     }
 
-	public void Init(LogicModules chip)
+	public void Init(SimpleModule chip)
     {     
  
         foreach (Transform t in transform)

@@ -1,28 +1,61 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public  class Player : Singleton<Player>
 {
+
+    private PlayerData _playerData = new PlayerData();
+    public PlayerData PlayerData
+    {
+        get
+        {
+            return _playerData;
+        }
+        set
+        {
+            _playerData = value;
+        }
+    }
+
+    //serialize in separate files
+    private List<SnakeProfile> _playerSnakes = new List<SnakeProfile>();
+    
+
     public Action OnMoneyChanged = () => { };
-    private int _money = 500000;
+
+    public List<LogicModules> Modules
+    {
+        get
+        {
+            return PlayerData._modules;
+        }
+        set
+        {
+            PlayerData._modules = value;
+        }
+    }
+
     public int Money
     {
         get
         {
-            return _money;
+            return PlayerData._money;
         }
         set
         {
-            _money = value;
+            PlayerData._money = value;
             OnMoneyChanged();
         }
     }
 
 	public Action OnSnakeChanged = ()=>{};
 
-	private SnakeProfile _selectedSnake;
+
+    private SnakeProfile _selectedSnake;
+
 	public SnakeProfile SelectedSnake
 	{
 		get
@@ -32,11 +65,19 @@ public  class Player : Singleton<Player>
 		set
 		{
 			_selectedSnake = value;
+            if (_selectedSnake!=null)
+            {
+                PlayerData._selectedSnakeId = Snakes.IndexOf(value);
+            }
+            else
+            {
+                PlayerData._selectedSnakeId = -1;
+            }
 			OnSnakeChanged ();
 		}
 	}
 
-    private List<SnakeProfile> _playerSnakes = new List<SnakeProfile>();
+    
     public List<SnakeProfile> Snakes
     {
         get
@@ -49,32 +90,48 @@ public  class Player : Singleton<Player>
         }
     }
 
+    
     public List<SnakeSkin> Skins
     {
         get
         {
-            if (_skins==null)
+            if (PlayerData._skinsIds.Count==0)
             {
-				_skins = new List<SnakeSkin>(DefaultResources.BaseSkins);
+                PlayerData._skinsIds = new List<SnakeSkin>(DefaultResources.BaseSkins).Select(s=>s.SkinName).ToList();
             }
-            return _skins;
+
+            List<SnakeSkin> skins = DefaultResources.Skins.Where(s => PlayerData._skinsIds.Contains(s.SkinName)).ToList();
+
+            return skins;
+        }
+        set
+        {
+            PlayerData._skinsIds = new List<string>();
+            foreach (SnakeSkin ss in value)
+            {
+                PlayerData._skinsIds.Add(ss.SkinName);
+            }
+
         }
     }
-    private List<SnakeSkin> _skins;
 
+    public void AddSkin(SnakeSkin ss)
+    {
+        PlayerData._skinsIds.Add(ss.SkinName);
+    }
 
-    public List<LogicModules> Modules = new List<LogicModules>();
-    public Dictionary<LogicElement, int> Elements = new Dictionary<LogicElement, int>();
     public Action OnElementsListChanged = ()=> { };
     public Action OnSkinListChanged = () => { };
 
     public void AddElements(LogicElement logicElement, int v)
     {
-        if (!Elements.ContainsKey(logicElement))
+       
+        if (PlayerData._elements.FirstOrDefault(le=>le.ElementType == logicElement.ElementType)==null)
         {
-            Elements.Add(logicElement, 0);
+            
+            PlayerData._elements.Add(new PlayerElement(logicElement.ElementType, 0));
         }
-        Elements[logicElement] += v;
+        PlayerData._elements.FirstOrDefault(le => le.ElementType == logicElement.ElementType).Count += v;
         OnElementsListChanged();
     }
 
@@ -94,29 +151,27 @@ public  class Player : Singleton<Player>
         {
             return int.MaxValue;
         }
-        if (!Elements.ContainsKey(element))
+
+        if (PlayerData._elements.FirstOrDefault(le => le.ElementType == element.ElementType) == null)
         {
             AddElements(element, 0);
         }
 
-        return Elements[element];
+
+        return PlayerData._elements.FirstOrDefault(le => le.ElementType == element.ElementType).Count;
     }
 
-    public void AddSkin(SnakeSkin ss)
-    {
-        Skins.Add(ss);
-        OnSkinListChanged();
-    }
+ 
 
     public void RemoveSkin(SnakeSkin ss)
     {
-        Skins.Remove(ss);
+        PlayerData._skinsIds.Remove(ss.SkinName);
         OnSkinListChanged();
     }
 
 	public void CreateSnake()
 	{
-		Snakes.Add (new SnakeProfile());
+		Snakes.Add (new SnakeProfile(DefaultResources.RandomSkin().SkinName));
 		SelectedSnake = Snakes[Snakes.Count-1];
 	}
 

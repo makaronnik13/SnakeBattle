@@ -23,7 +23,6 @@ public class ChipsList : MonoBehaviour {
 
 	public void UpdateList(List<LogicModules> modules)
     {
-
         foreach (Transform t in _contentTransform)
         {
             Destroy(t.gameObject);

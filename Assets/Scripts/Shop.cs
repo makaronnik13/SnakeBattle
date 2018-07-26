@@ -91,12 +91,19 @@ public class Shop : MonoBehaviour {
             case "ModuleHolder":
                 ModuleHolder moduleHolder = (ModuleHolder)shopObject;
                 Player.Instance.Money -= moduleHolder.Cost;
-                Player.Instance.Modules.Add(new LogicModules(moduleHolder));
+                if (moduleHolder.moduleType == ModuleHolder.ModuleType.Simple)
+                {
+                    Player.Instance.Modules.Add(new SimpleModule(moduleHolder));
+                }
+                else
+                {
+                    Player.Instance.Modules.Add(new ComplexModule(moduleHolder));
+                }
                 break;
             case "SnakeSkin":
                 SnakeSkin snakeSkin = (SnakeSkin)shopObject;
                 Player.Instance.Money -= snakeSkin.SkinCost;
-                Player.Instance.Skins.Add(snakeSkin);
+                Player.Instance.AddSkin(snakeSkin);
                 break;
             case "LogicElement":
                 LogicElement logicElement = (LogicElement)shopObject;

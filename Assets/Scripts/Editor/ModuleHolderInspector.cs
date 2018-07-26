@@ -30,7 +30,7 @@ public class ModuleHolderInspector : Editor
 
         if (_holder.moduleType == ModuleHolder.ModuleType.Simple)
         {
-           _holder.Operator = (ModuleHolder.BaseModuleOperator)EditorGUILayout.EnumPopup("Operator", _holder.Operator);
+           //_holder.Operator = (ModuleHolder.BaseModuleOperator)EditorGUILayout.EnumPopup("Operator", _holder.Operator);
         }
         else
         {

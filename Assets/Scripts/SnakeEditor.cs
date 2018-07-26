@@ -230,13 +230,13 @@ public class SnakeEditor : MonoBehaviour
 
 		if (!CurrentSnake.Skin.Base)
 		{
-			Player.Instance.Skins.Add(CurrentSnake.Skin);
+			Player.Instance.AddSkin(CurrentSnake.Skin);
 		}
 
         CurrentSnake.Skin = skin;
         if (!skin.Base)
         {
-            Player.Instance.Skins.Remove(skin);
+            Player.Instance.RemoveSkin(skin);
         }
        
 		SnakeUpdated ();

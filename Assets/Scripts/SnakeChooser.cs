@@ -74,7 +74,7 @@ public class SnakeChooser : Singleton<SnakeChooser> {
 
     public void CreateSnake()
     {
-        SnakeProfile newSnake = new SnakeProfile();
+        SnakeProfile newSnake = new SnakeProfile(DefaultResources.RandomSkin().SkinName);
         Player.Instance.Snakes.Add(newSnake);
         UpdateSnakeList();
         EditingSnake = newSnake;

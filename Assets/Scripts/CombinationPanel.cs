@@ -7,17 +7,24 @@ using UnityEngine;
 
 public class CombinationPanel : MonoBehaviour {
 
-    private LogicModules _editingModule
+    private ComplexModule _editingModule
     {
         get
         {
-            return GetComponentInParent<ModulesEditor>().EditingModule;
+            if (GetComponentInParent<ModulesEditor>().EditingModule!=null)
+            {
+                if (GetComponentInParent<ModulesEditor>().EditingModule.ModuleType == ModuleHolder.ModuleType.Combination)
+                {
+                    return GetComponentInParent<ModulesEditor>().EditingModule as ComplexModule;
+                }
+            }
+            return null;
         }
     }
     private CombinationTemplatePanel _activeTemplate;
     private LogicModules ChoosedSubmodule;
 
-	public void Init(LogicModules module)
+	public void Init(ComplexModule module)
     {
         if (_editingModule!=null)
         {
@@ -54,7 +61,7 @@ public class CombinationPanel : MonoBehaviour {
             GetComponentInParent<ModulesEditor>().UpdateModulesList();
         }
 
-        _editingModule.SetSubmodule(v, GetComponentInParent<ModulesEditor>()._submoduleCounter.SelectedModule);
+        _editingModule.SetSubmodule(v, (SimpleModule)GetComponentInParent<ModulesEditor>()._submoduleCounter.SelectedModule);
         GetComponentInParent<ModulesEditor>()._submoduleCounter.SelectedModule = null;
     }
 

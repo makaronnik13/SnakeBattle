@@ -21,7 +21,7 @@ public class CombinationTemplatePanel : MonoBehaviour {
     }
 
 
-    public void Init(LogicModules module)
+    public void Init(ComplexModule module)
     {
         Regex rgx = new Regex("[^a-zA-Z0-9 -]");
         string alphCombinationString = rgx.Replace(module.CombinationString, "");

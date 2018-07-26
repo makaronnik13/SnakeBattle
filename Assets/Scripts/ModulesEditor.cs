@@ -108,7 +108,7 @@ public class ModulesEditor : MonoBehaviour {
             if (module.ModuleType == ModuleHolder.ModuleType.Simple)
             {
                 _submoduleCounter.gameObject.SetActive(false);
-                _chipPanel.Init(module);
+                _chipPanel.Init((SimpleModule)module);
                 Submodules.gameObject.SetActive(false);
                 Elements.gameObject.SetActive(true);
                 _elementCounter.gameObject.SetActive(true);
@@ -116,7 +116,7 @@ public class ModulesEditor : MonoBehaviour {
             }
             else
             {
-                _combinationPanel.Init(module);
+                _combinationPanel.Init((ComplexModule)module);
                 Elements.gameObject.SetActive(false);
                 Submodules.gameObject.SetActive(true);
                 _submoduleCounter.gameObject.SetActive(true);
@@ -174,7 +174,7 @@ public class ModulesEditor : MonoBehaviour {
         }
 
 
-        editingModule.SetElement(position, newElement.ElementType);
+        ((SimpleModule)editingModule).SetElement(position, newElement.ElementType);
        
         if (currentElement.ElementType == LogicElement.LogicElementType.MyHead)
         {
@@ -186,7 +186,7 @@ public class ModulesEditor : MonoBehaviour {
     private void RemovePreviousHead()
     {
         Vector2 previousHeadPosition = _chipPanel.GetHeadPosition();
-        EditingModule.SetElement(previousHeadPosition, LogicElement.LogicElementType.Any);
+        ((SimpleModule)EditingModule).SetElement(previousHeadPosition, LogicElement.LogicElementType.Any);
     }
 
     private void PlaceHeadNear(Vector2 pos)
@@ -213,9 +213,9 @@ public class ModulesEditor : MonoBehaviour {
                 }
             }
             newHeadPos = avaliablePositions.OrderBy(s => Vector2.Distance(s, pos)).First();
-            Player.Instance.AddElements(DefaultResources.GetElementByEnum((LogicElement.LogicElementType)EditingModule.Elements[(int)newHeadPos.x, (int)newHeadPos.y]), 1);
+            Player.Instance.AddElements(DefaultResources.GetElementByEnum((LogicElement.LogicElementType)((SimpleModule)EditingModule).Elements[(int)newHeadPos.x, (int)newHeadPos.y]), 1);
         }
-        EditingModule.SetElement(newHeadPos, LogicElement.LogicElementType.MyHead);
+        ((SimpleModule)EditingModule).SetElement(newHeadPos, LogicElement.LogicElementType.MyHead);
     }
 
     public void SetSelectedElement(LogicElement element)

@@ -1,12 +1,19 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-//[System.Serializable]
+[System.Serializable]
 public class SnakeProfile
 {
+    [SerializeField]
     private string _nickName = null;
+    [SerializeField]
+    private string _skinName;
+    [SerializeField]
+    private LogicModules[] _modules;
+
     public string NickName
     {
         get
@@ -20,16 +27,17 @@ public class SnakeProfile
     }
 
     public Action<SnakeSkin> OnSkinShanged = (ss)=> { };
+
     public SnakeSkin Skin
     {
         get
-        {    
-            return _skin;
+        {
+            return DefaultResources.Skins.FirstOrDefault(s=>s.SkinName == _skinName);
         }
         set
         {
-            _skin = value;
-            OnSkinShanged(_skin);
+            _skinName = value.SkinName;
+            OnSkinShanged(DefaultResources.Skins.FirstOrDefault(s => s.SkinName == _skinName));
         }
     }
 
@@ -41,10 +49,14 @@ public class SnakeProfile
         }
     }
 
-    private SnakeSkin _skin;
 
-    public LogicModules[] Modules;
-
+    public LogicModules[] Modules
+    {
+        get
+        {
+            return _modules;
+        }
+    }
     private int _modulesSlots = 3;
     public int ModulesSlots
     {
@@ -59,21 +71,25 @@ public class SnakeProfile
             for (int i = 0; i<_modulesSlots;i++)
             {
                 LogicModules lm = null;
-                if (i<Modules.Length)
+                if (i<_modules.Length)
                 {
-                    lm = Modules[i];
+                    lm = _modules[i];
                 }
                 newModules.Add(lm);
             }
-            Modules = newModules.ToArray();
+            _modules = newModules.ToArray();
         }
+    }
+
+    public SnakeProfile(string name)
+    {
+        _modules = new LogicModules[ModulesSlots];
+        _skinName = name;
+        _nickName = DefaultResources.RandomName();
     }
 
     public SnakeProfile()
     {
-        Modules = new LogicModules[ModulesSlots];
-        _skin = DefaultResources.RandomSkin();
-        _nickName = DefaultResources.RandomName();
-    }
 
+    }
 }
