@@ -73,4 +73,6 @@ public class LogicModules
         return false;
     }
 
+    private bool Check
+
 }
