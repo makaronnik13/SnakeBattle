@@ -15786,7 +15786,7 @@ MonoBehaviour:
   Menu: {fileID: 1718491739}
   GameOver: {fileID: 1642462032}
   GamePanel: {fileID: 1385787643}
-  GameSpeed: 0.67
+  GameSpeed: 1.09
   Board: {fileID: 516905211}
 --- !u!1 &1626222958
 GameObject:

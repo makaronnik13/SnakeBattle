@@ -270,6 +270,7 @@ public class SnakeEditor : MonoBehaviour
         {
             Player.Instance.Modules.Add(slot.Module);
             Modules.UpdateList(Player.Instance.Modules);
+            CurrentSnake.Modules[slot.transform.parent.GetSiblingIndex() - 1] = null;
             slot.SetSlot(null);
         }
 
