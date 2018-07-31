@@ -7239,7 +7239,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -203.28003, y: 190.20003}
+  m_AnchoredPosition: {x: -203.28, y: 190.20003}
   m_SizeDelta: {x: -604.15, y: -380.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &684387581
@@ -7891,7 +7891,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -203.28876, y: 190.2}
+  m_AnchoredPosition: {x: -203.28879, y: 190.2}
   m_SizeDelta: {x: -604.18, y: -380.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &771314015
@@ -15786,7 +15786,7 @@ MonoBehaviour:
   Menu: {fileID: 1718491739}
   GameOver: {fileID: 1642462032}
   GamePanel: {fileID: 1385787643}
-  GameSpeed: 1.09
+  GameSpeed: 0.26
   Board: {fileID: 516905211}
 --- !u!1 &1626222958
 GameObject:
