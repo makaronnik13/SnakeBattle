@@ -80,6 +80,8 @@ public class Snake : IEnumerable<Vector2Int>
 
         var newHead = NextHeadPosition(direction);
 
+        Debug.Log(newHead);
+
         if (!LogicElement.IsWalkable(board[newHead].Content))
         {
             return;
@@ -232,118 +234,41 @@ public class Snake : IEnumerable<Vector2Int>
     {
         List<Vector2Int> avaliableDirections = new List<Vector2Int>
         {
-            Vector2Int.up,
+            Vector2Int.left,
             Vector2Int.right,
-            Vector2Int.left
+            Vector2Int.up
         };
+
+        List<Vector2Int> worldAvaliableDirections = new List<Vector2Int>();
 
         //remove not walkable tiles
         for (int i = 2; i>= 0; i--)
         {
             Vector2Int dir = avaliableDirections[i];
-            Vector2Int worldDir = dir;
+            Vector2Int worldDir = HeadToBoard(this, dir);
 
-            var headPosition = body.Last.Value;
-            var nextPosition = body.Last.Previous.Value;
-
-            if (nextPosition.y > headPosition.y)
+            Debug.Log((Head + worldDir)+" "+ board[Head + worldDir].Content);
+            if (LogicElement.IsWalkable(board[Head+ worldDir].Content))
             {
-                if (dir == Vector2Int.up)
-                {
-                    worldDir = Vector2Int.up;
-                }
-                if (dir == Vector2Int.down)
-                {
-                    worldDir = Vector2Int.down;
-                }
-                if (dir == Vector2Int.left)
-                {
-                    worldDir = Vector2Int.left;
-                }
-                if (dir == Vector2Int.right)
-                {
-                    worldDir = Vector2Int.right;
-                }
-            }
-
-            if (nextPosition.y < headPosition.y)
-            {
-                if (dir == Vector2Int.up)
-                {
-                    worldDir = Vector2Int.down;
-                }
-                if (dir == Vector2Int.down)
-                {
-                    worldDir = Vector2Int.up;
-                }
-                if (dir == Vector2Int.left)
-                {
-                    worldDir = Vector2Int.right;
-                }
-                if (dir == Vector2Int.right)
-                {
-                    worldDir = Vector2Int.left;
-                }
-            }
-            else if (nextPosition.x > headPosition.x)
-            {
-                if (dir == Vector2Int.up)
-                {
-                    worldDir = Vector2Int.right;
-                }
-                if (dir == Vector2Int.down)
-                {
-                    worldDir = Vector2Int.left;
-                }
-                if (dir == Vector2Int.left)
-                {
-                    worldDir = Vector2Int.up;
-                }
-                if (dir == Vector2Int.right)
-                {
-                    worldDir = Vector2Int.down;
-                }
-            }
-            else if (nextPosition.x < headPosition.x)
-            {
-                if (dir == Vector2Int.up)
-                {
-                    worldDir = Vector2Int.left;
-                }
-                if (dir == Vector2Int.down)
-                {
-                    worldDir = Vector2Int.right;
-                }
-                if (dir == Vector2Int.left)
-                {
-                    worldDir = Vector2Int.down;
-                }
-                if (dir == Vector2Int.right)
-                {
-                    worldDir = Vector2Int.up;
-                }
-            }
-
-            if (!LogicElement.IsWalkable(board[Head+worldDir].Content))
-            {
-                avaliableDirections.Remove(avaliableDirections[i]);
+                worldAvaliableDirections.Add(worldDir);
             }
         }
 
         //return if ther is no walkable tiles near
-        if (avaliableDirections.Count == 0)
+        if (worldAvaliableDirections.Count == 0)
         {
             return Vector2Int.zero;
         }
 
-        avaliableDirections = GetDirectionByModules(avaliableDirections);
+        worldAvaliableDirections = GetDirectionByModules(worldAvaliableDirections, this);
 
-        int randomValue = Mathf.RoundToInt(UnityEngine.Random.Range(0, avaliableDirections.Count));
+       
+        int randomValue = Mathf.RoundToInt(UnityEngine.Random.Range(0, worldAvaliableDirections.Count));
      
-        return avaliableDirections[randomValue];
+        return worldAvaliableDirections[randomValue];
     }
 
-    private List<Vector2Int> GetDirectionByModules(List<Vector2Int> avaliableDirections)
+    private List<Vector2Int> GetDirectionByModules(List<Vector2Int> avaliableDirections, Snake snake)
     {
         foreach (LogicModules module in Profile.Modules)
         {
@@ -354,101 +279,104 @@ public class Snake : IEnumerable<Vector2Int>
 
             foreach (Vector2Int dir in avaliableDirections)
             {
-                Vector2Int worldDir = dir;
-
-                var headPosition = body.Last.Value;
-                var nextPosition = body.Last.Previous.Value;
-
-                if (nextPosition.y < headPosition.y)
+                Debug.Log(dir);
+                if (module.CanMoveInThisDirection(Head, dir, board, snake))
                 {
-                    if (dir == Vector2Int.up)
-                    {
-                        worldDir = Vector2Int.up;
-                    }
-                    if (dir == Vector2Int.down)
-                    {
-                        worldDir = Vector2Int.down;
-                    }
-                    if (dir == Vector2Int.left)
-                    {
-                        worldDir = Vector2Int.left;
-                    }
-                    if (dir == Vector2Int.right)
-                    {
-                        worldDir = Vector2Int.right;
-                    }
-                }
-
-                if (nextPosition.y > headPosition.y)
-                {
-                    if (dir == Vector2Int.up)
-                    {
-                        worldDir = Vector2Int.down;
-                    }
-                    if (dir == Vector2Int.down)
-                    {
-                        worldDir = Vector2Int.up;
-                    }
-                    if (dir == Vector2Int.left)
-                    {
-                        worldDir = Vector2Int.right;
-                    }
-                    if (dir == Vector2Int.right)
-                    {
-                        worldDir = Vector2Int.left;
-                    }
-                }
-                else if (nextPosition.x < headPosition.x)
-                {
-                    if (dir == Vector2Int.up)
-                    {
-                        worldDir = Vector2Int.right;
-                    }
-                    if (dir == Vector2Int.down)
-                    {
-                        worldDir = Vector2Int.left;
-                    }
-                    if (dir == Vector2Int.left)
-                    {
-                        worldDir = Vector2Int.up;
-                    }
-                    if (dir == Vector2Int.right)
-                    {
-                        worldDir = Vector2Int.down;
-                    }
-                }
-                else if (nextPosition.x > headPosition.x)
-                {
-                    if (dir == Vector2Int.up)
-                    {
-                        worldDir = Vector2Int.left;
-                    }
-                    if (dir == Vector2Int.down)
-                    {
-                        worldDir = Vector2Int.right;
-                    }
-                    if (dir == Vector2Int.left)
-                    {
-                        worldDir = Vector2Int.down;
-                    }
-                    if (dir == Vector2Int.right)
-                    {
-                        worldDir = Vector2Int.up;
-                    }
-                }
-
-              
-                if (module.CanMoveInThisDirection(Head, dir, board))
-                {
-                    Debug.Log("________");
-                    Debug.Log("local: " + dir);
-                    Debug.Log("world: " + worldDir);
-                    return new List<Vector2Int>() { worldDir };
+                    Debug.Log("=>");
+                    Debug.Log(dir);
+                    return new List<Vector2Int>() { dir};
                 }
             }
         }
 
         Debug.Log(avaliableDirections.Count);
+
         return avaliableDirections;
+    }
+
+    public static Vector2Int HeadToBoard(Snake snake, Vector2Int dir)
+    {
+        Vector2Int worldDir = dir;
+        var headPosition = snake.body.Last.Value;
+        var nextPosition = snake.body.Last.Previous.Value;
+
+        if (nextPosition.y < headPosition.y)
+        {
+            if (dir == Vector2Int.up)
+            {
+                worldDir = Vector2Int.up;
+            }
+            if (dir == Vector2Int.down)
+            {
+                worldDir = Vector2Int.down;
+            }
+            if (dir == Vector2Int.left)
+            {
+                worldDir = Vector2Int.left;
+            }
+            if (dir == Vector2Int.right)
+            {
+                worldDir = Vector2Int.right;
+            }
+        }
+
+        if (nextPosition.y > headPosition.y)
+        {
+            if (dir == Vector2Int.up)
+            {
+                worldDir = Vector2Int.down;
+            }
+            if (dir == Vector2Int.down)
+            {
+                worldDir = Vector2Int.up;
+            }
+            if (dir == Vector2Int.left)
+            {
+                worldDir = Vector2Int.left;
+            }
+            if (dir == Vector2Int.right)
+            {
+                worldDir = Vector2Int.right;
+            }
+        }
+        else if (nextPosition.x < headPosition.x)
+        {
+            if (dir == Vector2Int.up)
+            {
+                worldDir = Vector2Int.right;
+            }
+            if (dir == Vector2Int.down)
+            {
+                worldDir = Vector2Int.left;
+            }
+            if (dir == Vector2Int.left)
+            {
+                worldDir = Vector2Int.up;
+            }
+            if (dir == Vector2Int.right)
+            {
+                worldDir = Vector2Int.down;
+            }
+        }
+        else if (nextPosition.x > headPosition.x)
+        {
+            if (dir == Vector2Int.up)
+            {
+                worldDir = Vector2Int.left;
+            }
+            if (dir == Vector2Int.down)
+            {
+                worldDir = Vector2Int.right;
+            }
+            if (dir == Vector2Int.left)
+            {
+                worldDir = Vector2Int.down;
+            }
+            if (dir == Vector2Int.right)
+            {
+                worldDir = Vector2Int.up;
+            }
+        }
+        return worldDir;
     }
 }
