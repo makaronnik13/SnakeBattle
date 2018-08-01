@@ -51,10 +51,7 @@ public class Tile : MonoBehaviour
             img = frontImage;
         }
 
-        if (top)
-        {
-            img.color = new Color(1, 1, 1, 1);
-        }
+       
 
 
         _content = t;
@@ -97,7 +94,7 @@ public class Tile : MonoBehaviour
                 img.sprite = _baseSprite;
                 if (top)
                 {
-                    img.color = new Color(1,1,1,0);
+                   // img.color = new Color(1,1,1,0);
                 }
                 break;
         }
@@ -123,13 +120,15 @@ public class Tile : MonoBehaviour
 
 
     // Use this for initialization
-    public void Init(ElementPair s)
+    public void Init(ElementPair s, ElementPair sBottom)
     {
         _content = s.element;
         image = GetComponent<Image>();
         frontImage = transform.GetChild(0).GetComponent<Image>();
-        _baseSprite = s.image;
+        _baseSprite = sBottom.image;
+
         image.sprite = _baseSprite;
+        frontImage.sprite = s.image;
     }
 
  

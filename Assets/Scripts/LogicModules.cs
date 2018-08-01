@@ -43,9 +43,6 @@ public class LogicModules
             return _size;
         }
     }
-
-   
-
   
 
     public LogicModules()
@@ -67,10 +64,10 @@ public class LogicModules
 
         if (ModuleType == ModuleHolder.ModuleType.Simple)
         {
-            Debug.Log("World dir: " + dir);
+            //Debug.Log("World dir: " + dir);
 
             int[,] boardCells = new int[Size, Size];
-            int[,] moduleCells = RotateElementsByDirection(((SimpleModule)this).Elements,  dir);
+            int[,] moduleCells = RotateElementsByDirection(((SimpleModule)this).Elements,  Snake.HeadToBoard(snake, dir));
 
 
             Vector2Int headModulePosition = Vector2Int.zero;
@@ -78,7 +75,7 @@ public class LogicModules
             {
                 for (int j = 0; j < Size; j++)
                 {
-                    Debug.Log(moduleCells[i, j]);
+                  
 
                     if ( (LogicElement.LogicElementType)moduleCells[i,j] == LogicElement.LogicElementType.MyHead)
                     {
@@ -87,33 +84,42 @@ public class LogicModules
                 }
             }
 
-            Debug.Log("___");
 
             Vector2Int leftTopCorner = head - headModulePosition;
 
-            for (int i = 0; i<Size; i++)
+            for (int j = 0; j<Size; j++)
             {
-                for (int j = 0; j < Size; j++)
+                for (int i = 0; i < Size; i++)
                 {
                     Vector2Int pos = new Vector2Int(leftTopCorner.x+i, leftTopCorner.y+j);
 
-                    
+
                     if (pos.x>0 && pos.y>0 && pos.x<board.Columns && pos.y<board.Rows)
                     {
-                        boardCells[i, j] = (int)board[leftTopCorner + new Vector2Int(i, j)]._content;
+                        boardCells[i, j] = (int)board[pos]._content;
                     }
                     else
                     {
                         boardCells[i, j] = (int)LogicElement.LogicElementType.Wall;
                     }
-
-                    Debug.Log(boardCells[i,j]);
                 }
             }
 
-           
+
+            Debug.Log(Snake.HeadToBoard(snake, dir)+" "+dir);
 
             return CheckTemplate(boardCells, moduleCells);
+        }
+
+        else
+        {
+            switch (((ComplexModule)this).CombinationString)
+            {
+                case ("!1"):
+                    {
+                        return !((ComplexModule)this).Submodules[0].CanMoveInThisDirection(head, dir, board, snake);
+                    }
+            }
         }
 
         return false;
@@ -121,37 +127,33 @@ public class LogicModules
 
     private int[,] RotateElementsByDirection(int[,] elements, Vector2Int dir)
     {
-        Debug.Log("Local dir: "+dir);
-
         if (dir == Vector2Int.up)
         {
-            Debug.Log("180g");
             return RotateMatrixCounterClockwise(RotateMatrixCounterClockwise(elements));
         }
 
         if (dir == Vector2Int.left)
         {
-            Debug.Log("270g");
             return RotateMatrixCounterClockwise(RotateMatrixCounterClockwise(RotateMatrixCounterClockwise(elements)));
         }
 
         if (dir == Vector2Int.right)
         {
-            Debug.Log("90g");
             return RotateMatrixCounterClockwise(elements);
         }
 
-        Debug.Log("0g");
         return elements;
     }
 
     private bool CheckTemplate(int[,] board, int[,] chip)
     {
   
-        for (int i =0;i<board.GetLength(0);i++)
+        for (int j =0;j<board.GetLength(0);j++)
         {
-            for (int j = 0; j < board.GetLength(1); j++)
+            for (int i = 0; i < board.GetLength(1); i++)
             {
+                Debug.Log(i+"/"+j+" "+ (LogicElement.LogicElementType)board[i, j]+"/"+ (LogicElement.LogicElementType)chip[i, j]+"     "+ (board[i, j] == chip[i, j] && ((LogicElement.LogicElementType)board[i, j]) != LogicElement.LogicElementType.MyHead));
+
                 if (board[i,j] == chip[i,j] && ((LogicElement.LogicElementType)board[i,j])!= LogicElement.LogicElementType.MyHead)
                 {
                     return true;
@@ -163,6 +165,7 @@ public class LogicModules
 
     private int[,] RotateMatrixCounterClockwise(int[,] oldMatrix)
     {
+        Debug.Log("_______");
         int[,] newMatrix = new int[oldMatrix.GetLength(1), oldMatrix.GetLength(0)];
         int newColumn, newRow = 0;
         for (int oldColumn = oldMatrix.GetLength(1) - 1; oldColumn >= 0; oldColumn--)
@@ -170,6 +173,7 @@ public class LogicModules
             newColumn = 0;
             for (int oldRow = 0; oldRow < oldMatrix.GetLength(0); oldRow++)
             {
+               // Debug.Log(new Vector2Int(oldRow, oldColumn)+" "+ oldMatrix[oldRow, oldColumn]);
                 newMatrix[newRow, newColumn] = oldMatrix[oldRow, oldColumn];
                 newColumn++;
             }

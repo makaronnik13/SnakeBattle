@@ -14,6 +14,7 @@ public class BoardTemplateInspector : Editor
     private Vector2 scrollPosition;
     private bool showTiles;
     private ReorderableList tilesList;
+    private bool topLayer = false;
 
     private void OnEnable()
     {
@@ -47,9 +48,15 @@ public class BoardTemplateInspector : Editor
             EditorGUILayout.BeginHorizontal();
             for (int j = 0; j < _template.Cells[0].raw.Count; j++)
             {
-                if(GUILayout.Button(_template.Cells[i].raw[j].image.texture, GUIStyle.none, GUILayout.Width(16), GUILayout.Height(16)))
+                Texture2D texture = _template.Cells[i].raw[j].image.texture;
+                if (!topLayer || _template.Cells[i].raw[j].element == LogicElement.LogicElementType.None)
                 {
-                    _template.SetCell(_brush, i, j);
+                    texture = _template.CellsBack[i].raw[j].image.texture;
+                }
+
+                if (GUILayout.Button(texture, GUIStyle.none, GUILayout.Width(16), GUILayout.Height(16)))
+                {
+                    _template.SetCell(_brush, i, j, topLayer);
                     EditorUtility.SetDirty(_template);
                 }
             }
@@ -63,10 +70,28 @@ public class BoardTemplateInspector : Editor
         {
             if (DefaultResources.GetElementByEnum(ep.element)!=null)
             {
-                if (GUILayout.Button(ep.image.texture, GUILayout.Width(30), GUILayout.Height(30)))
+                if (!topLayer)
                 {
-                    _brush = ep;
+                    if (ep.element == LogicElement.LogicElementType.None)
+                    {
+                        if (GUILayout.Button(ep.image.texture, GUILayout.Width(30), GUILayout.Height(30)))
+                        {
+                            _brush = ep;
+                        }
+                    }
                 }
+                else
+                {
+                    if (ep.element != LogicElement.LogicElementType.None || ep == _template.Tiles.FirstOrDefault(e=>e.element == LogicElement.LogicElementType.None))
+                    {
+                        if (GUILayout.Button(ep.image.texture, GUILayout.Width(30), GUILayout.Height(30)))
+                        {
+                            _brush = ep;
+                        }
+                    }
+                }
+
+                
             }       
         }
 
@@ -78,7 +103,26 @@ public class BoardTemplateInspector : Editor
 
         if (_brush!=null)
         {
+            EditorGUILayout.BeginHorizontal();
             GUILayout.Label(_brush.image.texture, GUILayout.Width(50), GUILayout.Height(50));
+            string s = "top";
+            if (!topLayer)
+            {
+                s = "bottom";
+            }
+
+            if (GUILayout.Button(s, GUILayout.Width(100), GUILayout.Height(50)))
+            {
+                topLayer = !topLayer;
+
+                if(_brush!=null && _brush.element!= LogicElement.LogicElementType.None && !topLayer)
+                {
+                    _brush = null;
+                }
+                
+            }
+
+            EditorGUILayout.EndHorizontal();
         }
 
         showTiles = EditorGUILayout.Foldout(showTiles, "Tiles");

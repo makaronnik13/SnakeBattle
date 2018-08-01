@@ -35,6 +35,7 @@ public class BoardTemplate : ScriptableObject
 
     [SerializeField]
     private List<ListColumn> _cells;
+    private List<ListColumn> _cellsBackground;
 
     [SerializeField]
     private List<ElementPair> _tiles;
@@ -59,12 +60,17 @@ public class BoardTemplate : ScriptableObject
     public void Setize(int w, int h)
     {
         List<ListColumn> newCells = new List<ListColumn>();
+        List<ListColumn> newCellsB = new List<ListColumn>();
 
         for (int i = 0; i<w; i++)
         {
             ListColumn l = new ListColumn(new List<ElementPair>());
+            ListColumn lb = new ListColumn(new List<ElementPair>());
+
             for (int j = 0; j < h; j++)
             {
+                lb.raw.Add(Tiles.FirstOrDefault(p => p.element == LogicElement.LogicElementType.None));
+
                 l.raw.Add(Tiles.FirstOrDefault(p => p.element == LogicElement.LogicElementType.None));
                 if (i == 0 || j == 0 || i == w-1 || j == h-1)
                 {
@@ -72,8 +78,10 @@ public class BoardTemplate : ScriptableObject
                 }
             }
             newCells.Add(l);
+            newCellsB.Add(l);
         }
 
+        _cellsBackground = newCellsB;
         _cells = newCells;
     }
 
@@ -81,29 +89,51 @@ public class BoardTemplate : ScriptableObject
     {
         get
         {
-            if (_cells == null)
+            if (_cells == null || _cellsBackground == null)
             {
-                Debug.Log("new cells");
-                _cells = new List<ListColumn>();
-                for (int i = 0; i < 10; i++)
-                {
-                    ListColumn l = new ListColumn(new List<ElementPair>());
-                    for (int j = 0; j < 10; j++)
-                    {
-                        l.raw.Add(Tiles.FirstOrDefault(p=>p.element == LogicElement.LogicElementType.None));
-                        if (i == 0 || j == 0 || i == 10 - 1 || j == 10 - 1)
-                        {
-                            l.raw[l.raw.Count - 1] = Tiles.FirstOrDefault(p => p.element == LogicElement.LogicElementType.Wall);
-                        }
-                    }
-                    _cells.Add(l);
-                }
-
-
-                SetWalls();
+                GenerateNewCells();
             }
             return _cells;
         }
+    }
+
+    public List<ListColumn> CellsBack
+    {
+        get
+        {
+            if (_cellsBackground == null || _cells == null)
+            {
+                GenerateNewCells();
+            }
+            return _cellsBackground;
+        }
+    }
+
+    private void GenerateNewCells()
+    {
+        Debug.Log("new cells");
+        _cells = new List<ListColumn>();
+        _cellsBackground = new List<ListColumn>();
+
+        for (int i = 0; i < 10; i++)
+        {
+            ListColumn l = new ListColumn(new List<ElementPair>());
+            ListColumn lb = new ListColumn(new List<ElementPair>());
+            for (int j = 0; j < 10; j++)
+            {
+                lb.raw.Add(Tiles.FirstOrDefault(p => p.element == LogicElement.LogicElementType.None));
+                l.raw.Add(Tiles.FirstOrDefault(p => p.element == LogicElement.LogicElementType.None));
+                if (i == 0 || j == 0 || i == 10 - 1 || j == 10 - 1)
+                {
+                    l.raw[l.raw.Count - 1] = Tiles.FirstOrDefault(p => p.element == LogicElement.LogicElementType.Wall);
+                }
+            }
+            _cells.Add(l);
+            _cellsBackground.Add(lb);
+        }
+
+
+        SetWalls();
     }
 
     private void SetWalls()
@@ -167,9 +197,16 @@ public class BoardTemplate : ScriptableObject
         throw new Exception("No avaliable slots on map!");
     }
 
-    public void SetCell(ElementPair t, int x, int y)
+    public void SetCell(ElementPair t, int x, int y, bool topLayer)
     {
-        _cells[x].raw[y] = t;
+        if (topLayer)
+        {
+            _cells[x].raw[y] = t;
+        }
+        else
+        {
+            _cellsBackground[x].raw[y] = t;
+        }
     }
 }
 

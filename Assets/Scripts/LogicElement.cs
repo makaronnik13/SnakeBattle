@@ -40,7 +40,6 @@ public class LogicElement:ScriptableObject
         LogicElementType.Batery,
         LogicElementType.Bug,
         LogicElementType.Crustling,
-        LogicElementType.MyTail,
         LogicElementType.EnemyTail
     };
 

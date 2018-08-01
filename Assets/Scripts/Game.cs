@@ -71,7 +71,6 @@ public class Game : MonoBehaviour
             {
                 var dir = snake.GetDirection();//controller.NextDirection();
 
-                Debug.Log(dir);
 
                 // New head position
                 var head = snake.NextHeadPosition(dir);

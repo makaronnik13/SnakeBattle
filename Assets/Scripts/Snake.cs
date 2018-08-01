@@ -80,7 +80,6 @@ public class Snake : IEnumerable<Vector2Int>
 
         var newHead = NextHeadPosition(direction);
 
-        Debug.Log(newHead);
 
         if (!LogicElement.IsWalkable(board[newHead].Content))
         {
@@ -247,7 +246,7 @@ public class Snake : IEnumerable<Vector2Int>
             Vector2Int dir = avaliableDirections[i];
             Vector2Int worldDir = HeadToBoard(this, dir);
 
-            Debug.Log((Head + worldDir)+" "+ board[Head + worldDir].Content);
+            //Debug.Log((Head + worldDir)+" "+ board[Head + worldDir].Content);
             if (LogicElement.IsWalkable(board[Head+ worldDir].Content))
             {
                 worldAvaliableDirections.Add(worldDir);
@@ -272,24 +271,24 @@ public class Snake : IEnumerable<Vector2Int>
     {
         foreach (LogicModules module in Profile.Modules)
         {
+
             if (module == null)
             {
                 continue;
             }
 
+
             foreach (Vector2Int dir in avaliableDirections)
             {
-                Debug.Log(dir);
+
                 if (module.CanMoveInThisDirection(Head, dir, board, snake))
                 {
                     Debug.Log("=>");
-                    Debug.Log(dir);
                     return new List<Vector2Int>() { dir};
                 }
             }
         }
 
-        Debug.Log(avaliableDirections.Count);
 
         return avaliableDirections;
     }

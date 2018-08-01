@@ -181,11 +181,11 @@ public class Board : MonoBehaviour, IEnumerable<Tile>
             {
                 if (template.Cells[i].raw[j].element == LogicElement.LogicElementType.MyHead || template.Cells[i].raw[j].element == LogicElement.LogicElementType.MyBody)
                 {
-                    this[i, j].Init(template.Tiles.FirstOrDefault(t=>t.element == LogicElement.LogicElementType.None));
+                    this[i, j].Init(template.CellsBack[i].raw[j], template.CellsBack[i].raw[j]);
                 }
                 else
                 {
-                    this[i, j].Init(template.Cells[i].raw[j]);
+                    this[i, j].Init(template.Cells[i].raw[j], template.CellsBack[i].raw[j]);
                 }
                 
             }
